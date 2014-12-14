@@ -9,6 +9,8 @@
 
 #include <Eigen/Dense>
 
+#include "define.h"
+
 #include <pcl/point_types.h>
 #include <pcl/point_cloud.h>
 #include <pcl/io/ply_io.h>
@@ -17,24 +19,21 @@
 
 using namespace std;
 
-template <typename PointType>
 class DataProvider
 {
 public:
-    typedef pcl::PointCloud<PointType> CloudType;
-    typedef typename CloudType::Ptr CloudTypePtr;
+    DataProvider() {}
+    virtual ~DataProvider() {}
 
     const uint32_t size();
-    CloudTypePtr operator [](uint32_t index) const { return getCloudAtIndex(index); }
-    CloudTypePtr& operator[](uint32_t index);
+    CloudTypePtr operator [](uint32_t index) { return getCloudAtIndex(index); }
 
     virtual const uint32_t numberOfClouds() = 0;
     virtual CloudTypePtr getCloudAtIndex(uint32_t index) = 0;
     virtual const Eigen::Affine3f initTransformOfCloudAtIndex(uint32_t index) = 0;
 };
 
-template <typename PointType>
-class DefaultDataProvider : public DataProvider<PointType>
+class DefaultDataProvider : public DataProvider
 {
 public:
 
@@ -44,8 +43,8 @@ public:
     {}
     virtual ~DefaultDataProvider() {}
     
-    const uint32_t numberOfClouds();
-    CloudTypePtr getCloudAtIndex(uint32_t index)
+    virtual const uint32_t numberOfClouds();
+    virtual CloudTypePtr getCloudAtIndex(uint32_t index)
     {
         CloudTypePtr cloud(new CloudType);
         const std::string filename = filenameOfCloudAtIndex(index);
@@ -56,7 +55,7 @@ public:
         }
         return cloud;
     }
-    const Eigen::Affine3f initTransformOfCloudAtIndex(uint32_t index);
+    virtual const Eigen::Affine3f initTransformOfCloudAtIndex(uint32_t index);
 
 private:
     const std::string filenameOfCloudAtIndex(uint32_t index);

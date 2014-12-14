@@ -1,12 +1,12 @@
+
+#include "define.h"
 #include "DataProvider.h"
 #include "CorresBuilder.h"
 
-typedef pcl::PointXYZRGBNormal PointType;
-
-int main(int argc, char *agrv)
+int main(int argc, char *agrv[])
 {
-    DefaultDataProvider<PointType> provider(10, "./data");
-    CorresBuilder<PointType> builder;
+    DefaultDataProvider provider(10, "./data");
+    CorresBuilder builder;
 
     builder(provider);
 
