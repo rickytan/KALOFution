@@ -16,9 +16,14 @@ public:
 
 private:
     void depthImageCallback(const boost::shared_ptr<openni_wrapper::DepthImage>&);
+    void execute(bool hasdata);
 
 private:
-    pcl::ONIGrabber grabber;
+    pcl::ONIGrabber m_grabber;
+    boost::condition_variable m_condDataReady;
+    boost::mutex m_mutexDataReady;
+    std::vector<unsigned short> m_rawDepthData;
+    int m_width, m_height;
 };
 
 #endif  // _ONIDUMPER_H_
