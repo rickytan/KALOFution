@@ -69,10 +69,10 @@
     <IncludePath>$(PCL_ROOT)\include\pcl-1.6;$(PCL_ROOT)\3rdParty\Boost\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(PCL_ROOT)\include\pcl-1.6;$(PCL_ROOT)\3rdParty\Eigen\include;$(PCL_ROOT)\3rdParty\Boost\include;$(IncludePath)</IncludePath>
+    <IncludePath>$(PCL_ROOT)\include\pcl-1.6;$(PCL_ROOT)\3rdParty\Eigen\include;$(PCL_ROOT)\3rdParty\Boost\include;$(OPEN_NI_INCLUDE);$(PCL_ROOT)\3rdParty\FLANN\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(PCL_ROOT)\3rdParty\Eigen\include;$(PCL_ROOT)\3rdParty\Boost\include;$(PCL_ROOT)\include\pcl-1.6;$(IncludePath)</IncludePath>
+    <IncludePath>$(PCL_ROOT)\3rdParty\Eigen\include;$(PCL_ROOT)\3rdParty\FLANN\include;$(PCL_ROOT)\3rdParty\Boost\include;$(PCL_ROOT)\include\pcl-1.6;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -131,14 +131,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\ricky%27s work\Labwork\KALOFution\KALOFution\CorresBuilder.h" />
-    <ClInclude Include="..\..\..\..\ricky%27s work\Labwork\KALOFution\KALOFution\DataProvider.h" />
-    <ClInclude Include="..\..\..\..\ricky%27s work\Labwork\KALOFution\KALOFution\define.h" />
+    <ClInclude Include="..\..\..\ricky%27s work\KALOFution\KALOFution\BasicParameter.h" />
+    <ClInclude Include="..\..\..\ricky%27s work\KALOFution\KALOFution\Depth2PLY.h" />
+    <ClInclude Include="..\..\..\ricky%27s work\KALOFution\KALOFution\ONIDumper.h" />
+    <ClInclude Include=".\CorresBuilder.h" />
+    <ClInclude Include=".\DataProvider.h" />
+    <ClInclude Include=".\define.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\ricky%27s work\Labwork\KALOFution\KALOFution\CorresBuilder.cpp" />
-    <ClCompile Include="..\..\..\..\ricky%27s work\Labwork\KALOFution\KALOFution\DataProvider.cpp" />
-    <ClCompile Include="..\..\..\..\ricky%27s work\Labwork\KALOFution\KALOFution\main.cpp" />
+    <ClCompile Include="..\..\..\ricky%27s work\KALOFution\KALOFution\BasicParameter.cpp" />
+    <ClCompile Include="..\..\..\ricky%27s work\KALOFution\KALOFution\Depth2PLY.cpp" />
+    <ClCompile Include="..\..\..\ricky%27s work\KALOFution\KALOFution\ONIDumper.cpp" />
+    <ClCompile Include=".\CorresBuilder.cpp" />
+    <ClCompile Include=".\DataProvider.cpp" />
+    <ClCompile Include=".\main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

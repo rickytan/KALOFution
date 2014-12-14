@@ -3,10 +3,18 @@
 #include "DataProvider.h"
 #include "CorresBuilder.h"
 
-int main(int argc, char *agrv[])
+void parse_params(BasicParameter& params, int argc, char *argv[])
 {
+
+}
+
+int main(int argc, char *argv[])
+{
+    BasicParameter params;
+    parse_params(params, argc, argv);
+
     DefaultDataProvider provider(10, "./data");
-    CorresBuilder builder;
+    CorresBuilder builder(params);
 
     builder(provider);
 

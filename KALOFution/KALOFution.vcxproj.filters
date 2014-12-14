@@ -15,24 +15,42 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\ricky%27s work\Labwork\KALOFution\KALOFution\define.h">
+    <ClInclude Include=".\CorresBuilder.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\ricky%27s work\Labwork\KALOFution\KALOFution\CorresBuilder.h">
+    <ClInclude Include=".\DataProvider.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\ricky%27s work\Labwork\KALOFution\KALOFution\DataProvider.h">
+    <ClInclude Include=".\define.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ricky%27s work\KALOFution\KALOFution\BasicParameter.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ricky%27s work\KALOFution\KALOFution\Depth2PLY.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ricky%27s work\KALOFution\KALOFution\ONIDumper.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\ricky%27s work\Labwork\KALOFution\KALOFution\CorresBuilder.cpp">
+    <ClCompile Include=".\CorresBuilder.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\ricky%27s work\Labwork\KALOFution\KALOFution\main.cpp">
+    <ClCompile Include=".\DataProvider.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\ricky%27s work\Labwork\KALOFution\KALOFution\DataProvider.cpp">
+    <ClCompile Include=".\main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ricky%27s work\KALOFution\KALOFution\BasicParameter.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ricky%27s work\KALOFution\KALOFution\Depth2PLY.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ricky%27s work\KALOFution\KALOFution\ONIDumper.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
