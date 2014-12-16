@@ -3,10 +3,16 @@
 #include "DataProvider.h"
 #include "CorresBuilder.h"
 #include "ONIDumper.h"
+#include "OptimizerParameter.h"
+#include "Optimizer.h"
+
+#include <pcl/console/parse.h>
 
 void parse_params(BasicParameter& params, int argc, char *argv[])
 {
+    using namespace pcl::console;
 
+    parse_argument(argc, argv, "--max_icp_iter", params.maxICPIteration);
 }
 
 int main(int argc, char *argv[])
@@ -20,8 +26,13 @@ int main(int argc, char *argv[])
 
     builder(provider);
     */
-    ONIDumper dumper("lounge.oni");
+    ONIDumper dumper("ml.oni");
     dumper.dumpTo("./data");
+
+    OptimizerParameter oparam;
+    Optimizer optimizer(oparam);
+
+    optimizer();
 
     return 0;
 }

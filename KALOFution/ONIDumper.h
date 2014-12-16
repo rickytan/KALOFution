@@ -9,7 +9,7 @@
 class ONIDumper
 {
 public:
-    ONIDumper(const std::string& onifile);
+    ONIDumper(const std::string& onifile) throw();
     ~ONIDumper();
 
     void dumpTo(const std::string& dir);
@@ -24,6 +24,8 @@ private:
     boost::mutex m_mutexDataReady;
     std::vector<unsigned short> m_rawDepthData;
     int m_width, m_height;
+
+    std::string m_dumpDirectory;
 };
 
 #endif  // _ONIDUMPER_H_

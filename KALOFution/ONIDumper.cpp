@@ -1,6 +1,8 @@
 #include "ONIDumper.h"
 #include "Depth2PLY.h"
 
+#include <pcl/io/ply_io.h>
+
 ONIDumper::ONIDumper(const std::string& onifile)
 : m_grabber(onifile, false, true)
 , m_condDataReady()
@@ -22,6 +24,8 @@ ONIDumper::~ONIDumper()
 
 void ONIDumper::dumpTo(const std::string& dir)
 {
+    m_dumpDirectory = dir;
+
     boost::unique_lock<boost::mutex> lock(m_mutexDataReady);
 
     m_grabber.start();
@@ -44,7 +48,20 @@ void ONIDumper::dumpTo(const std::string& dir)
 
 void ONIDumper::depthImageCallback(const boost::shared_ptr<openni_wrapper::DepthImage>& depth_wrapper)
 {
+    {
+        boost::mutex::scoped_try_lock lock(m_mutexDataReady);
+        if (!lock)
+            return;
 
+        if (m_width != depth_wrapper->getWidth() || m_height != depth_wrapper->getHeight()) {
+            m_width = depth_wrapper->getWidth();
+            m_height = depth_wrapper->getHeight();
+            m_rawDepthData.resize(m_width * m_height);
+        }
+
+        depth_wrapper->fillDepthImageRaw(m_width, m_height, &m_rawDepthData[0]);
+    }
+    m_condDataReady.notify_one();
 }
 
 void ONIDumper::execute(bool hasdata)
@@ -52,5 +69,9 @@ void ONIDumper::execute(bool hasdata)
     if (!hasdata)
         return;
 
-
+    static int frameCount = 0;
+    CloudTypePtr cloud = Depth2PLY(m_width, m_height, m_rawDepthData);
+    char filepath[1024] = { 0 };
+    sprintf(filepath, "%s/cloud_%d.ply", m_dumpDirectory.c_str(), frameCount++);
+    pcl::io::savePLYFileBinary(filepath, *cloud);
 }
