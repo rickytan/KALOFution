@@ -41,7 +41,7 @@ void ONIDumper::dumpTo(const std::string& dir)
 
     while (!m_finished) {
         m_grabber->start();
-        bool has_data = m_condDataReady.timed_wait(lock, boost::posix_time::millisec(3000));
+        bool has_data = m_condDataReady.timed_wait(lock, boost::posix_time::millisec(100));
         try {
             execute(has_data);
         }

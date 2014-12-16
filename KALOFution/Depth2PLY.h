@@ -10,8 +10,8 @@
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
 
-#define KINECT_DEFAULT_DEPTH_FOCAL_X    (585.f)
-#define KINECT_DEFAULT_DEPTH_FOCAL_Y    (585.f)
+#define KINECT_DEFAULT_DEPTH_FOCAL_X    (575.816f)
+#define KINECT_DEFAULT_DEPTH_FOCAL_Y    (575.816f)
 
 typedef pcl::PointXYZ Point;
 
