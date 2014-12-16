@@ -4,6 +4,11 @@
 #include <cstdio>
 #include <cstdlib>
 
+#ifdef WIN32
+
+#endif
+
+
 namespace Eigen {
     namespace internal {
         static inline double sqrt(double a) { return sqrt(a); }
