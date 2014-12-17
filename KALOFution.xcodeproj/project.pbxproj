@@ -15,6 +15,8 @@
 		9C5AF9BF1A3D34C200F50736 /* libpcl_io.1.6.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C5AF9BB1A3D34C200F50736 /* libpcl_io.1.6.0.dylib */; };
 		9C5AF9C01A3D34C200F50736 /* libpcl_kdtree.1.6.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C5AF9BC1A3D34C200F50736 /* libpcl_kdtree.1.6.0.dylib */; };
 		9C5AF9C11A3D34C200F50736 /* libpcl_registration.1.6.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C5AF9BD1A3D34C200F50736 /* libpcl_registration.1.6.0.dylib */; };
+		9CA77EEB1A3E8EDE00F62EB1 /* libflann_s.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CA77EEA1A3E8EDE00F62EB1 /* libflann_s.a */; };
+		9CA77EED1A3E8F0B00F62EB1 /* libflann.1.8.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CA77EEC1A3E8F0B00F62EB1 /* libflann.1.8.4.dylib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -42,6 +44,8 @@
 		9C5AF9BB1A3D34C200F50736 /* libpcl_io.1.6.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpcl_io.1.6.0.dylib; path = ../../../../usr/local/lib/libpcl_io.1.6.0.dylib; sourceTree = "<group>"; };
 		9C5AF9BC1A3D34C200F50736 /* libpcl_kdtree.1.6.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpcl_kdtree.1.6.0.dylib; path = ../../../../usr/local/lib/libpcl_kdtree.1.6.0.dylib; sourceTree = "<group>"; };
 		9C5AF9BD1A3D34C200F50736 /* libpcl_registration.1.6.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpcl_registration.1.6.0.dylib; path = ../../../../usr/local/lib/libpcl_registration.1.6.0.dylib; sourceTree = "<group>"; };
+		9CA77EEA1A3E8EDE00F62EB1 /* libflann_s.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libflann_s.a; path = ../../../../usr/local/Cellar/flann/1.8.4/lib/libflann_s.a; sourceTree = "<group>"; };
+		9CA77EEC1A3E8F0B00F62EB1 /* libflann.1.8.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libflann.1.8.4.dylib; path = ../../../../usr/local/Cellar/flann/1.8.4/lib/libflann.1.8.4.dylib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -49,6 +53,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9CA77EED1A3E8F0B00F62EB1 /* libflann.1.8.4.dylib in Frameworks */,
+				9CA77EEB1A3E8EDE00F62EB1 /* libflann_s.a in Frameworks */,
 				9C5AF9BE1A3D34C200F50736 /* libpcl_io_ply.1.6.0.dylib in Frameworks */,
 				9C5AF9BF1A3D34C200F50736 /* libpcl_io.1.6.0.dylib in Frameworks */,
 				9C5AF9C01A3D34C200F50736 /* libpcl_kdtree.1.6.0.dylib in Frameworks */,
@@ -63,6 +69,8 @@
 		9C5AF99E1A3C9DE100F50736 = {
 			isa = PBXGroup;
 			children = (
+				9CA77EEC1A3E8F0B00F62EB1 /* libflann.1.8.4.dylib */,
+				9CA77EEA1A3E8EDE00F62EB1 /* libflann_s.a */,
 				9C5AF9BA1A3D34C200F50736 /* libpcl_io_ply.1.6.0.dylib */,
 				9C5AF9BB1A3D34C200F50736 /* libpcl_io.1.6.0.dylib */,
 				9C5AF9BC1A3D34C200F50736 /* libpcl_kdtree.1.6.0.dylib */,
@@ -240,10 +248,14 @@
 					/usr/local/include,
 					/usr/local/include/eigen3,
 					"/usr/local/include/pcl-1.6",
+					/usr/local/include/ni,
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 				);
-				LIBRARY_SEARCH_PATHS = /usr/local/lib;
+				LIBRARY_SEARCH_PATHS = (
+					/usr/local/lib,
+					/usr/local/Cellar/flann/1.8.4/lib,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "";
 			};
@@ -256,10 +268,14 @@
 					/usr/local/include,
 					/usr/local/include/eigen3,
 					"/usr/local/include/pcl-1.6",
+					/usr/local/include/ni,
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 				);
-				LIBRARY_SEARCH_PATHS = /usr/local/lib;
+				LIBRARY_SEARCH_PATHS = (
+					/usr/local/lib,
+					/usr/local/Cellar/flann/1.8.4/lib,
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				USER_HEADER_SEARCH_PATHS = "";
 			};

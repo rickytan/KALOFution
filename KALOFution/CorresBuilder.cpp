@@ -66,7 +66,7 @@ void CorresBuilder::initCloudAndTransform(DataProvider& provider)
         CloudTypePtr cloud(new CloudType);
         for (int j = 0; j < rawCloud->points.size(); ++j)
         {
-            if (!_isnan(rawCloud->points[j].normal_x)) {
+            if (!isnan(rawCloud->points[j].normal_x)) {
                 cloud->push_back(rawCloud->points[j]);
             }
         }
