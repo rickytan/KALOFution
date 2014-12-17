@@ -15,6 +15,7 @@
 
 #include <boost/filesystem.hpp>
 #include <boost/thread.hpp>
+#include <boost/math/special_functions.hpp>
 
 using namespace std;
 
@@ -58,6 +59,7 @@ void CorresBuilder::operator()(DataProvider& provider)
 
 void CorresBuilder::initCloudAndTransform(DataProvider& provider)
 {
+    using namespace boost::math;
     m_pointClouds.resize(provider.size());
 
     for (uint32_t i = 0; i < provider.size(); ++i)
