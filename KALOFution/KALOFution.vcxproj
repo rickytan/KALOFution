@@ -140,6 +140,7 @@
     <ClInclude Include="..\..\..\ricky%27s work\KALOFution\KALOFution\ONIDumper.h" />
     <ClInclude Include="..\..\..\ricky%27s work\KALOFution\KALOFution\Optimizer.h" />
     <ClInclude Include="..\..\..\ricky%27s work\KALOFution\KALOFution\OptimizerParameter.h" />
+    <ClInclude Include="..\..\..\ricky%27s work\KALOFution\KALOFution\Parameter.h" />
     <ClInclude Include=".\CorresBuilder.h" />
     <ClInclude Include=".\DataProvider.h" />
     <ClInclude Include=".\define.h" />
@@ -150,6 +151,7 @@
     <ClCompile Include="..\..\..\ricky%27s work\KALOFution\KALOFution\ONIDumper.cpp" />
     <ClCompile Include="..\..\..\ricky%27s work\KALOFution\KALOFution\Optimizer.cpp" />
     <ClCompile Include="..\..\..\ricky%27s work\KALOFution\KALOFution\OptimizerParameter.cpp" />
+    <ClCompile Include="..\..\..\ricky%27s work\KALOFution\KALOFution\Parameter.cpp" />
     <ClCompile Include=".\CorresBuilder.cpp" />
     <ClCompile Include=".\DataProvider.cpp" />
     <ClCompile Include=".\main.cpp" />

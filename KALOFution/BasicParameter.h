@@ -5,7 +5,9 @@
 #include <iostream>
 #include <string>
 
-class BasicParameter
+class Parameter
+
+class BasicParameter : public Parameter
 {
 public:
     BasicParameter()
@@ -19,6 +21,9 @@ public:
         , acceptableCorresPointRatio(0.3)
         , maxICPIteration(20)
     {}
+    virtual ~BasicParameter() {}
+
+    virtual parse(int argc, char *argv[]);
 
     float acceptableCorresPointDistThres;
     float corresPointDistThres;
