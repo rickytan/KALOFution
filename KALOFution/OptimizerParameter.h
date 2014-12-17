@@ -2,7 +2,7 @@
 #ifndef _OPTIMIZERPARAMETER_H_
 #define _OPTIMIZERPARAMETER_H_
 
-class Parameter;
+#include "Parameter.h"
 
 class OptimizerParameter : public Parameter
 {
@@ -12,7 +12,7 @@ public:
     {}
     virtual ~OptimizerParameter() {}
 
-    virtual parse(int argc, char *argv[]);
+    virtual void parse(int argc, char *argv[]);
 
     int maxIteration;
 };

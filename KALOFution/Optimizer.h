@@ -23,6 +23,8 @@ public:
     Optimizer(OptimizerParameter &params);
     ~Optimizer();
 
+    void operator ()();
+
 private:
     void optimizeRigid();
     void eachCloudPair(CloudPair &pair, Mat &ATA, Vec &ATb, double &align_error);

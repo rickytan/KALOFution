@@ -5,7 +5,7 @@
 #include <iostream>
 #include <string>
 
-class Parameter
+#include "Parameter.h"
 
 class BasicParameter : public Parameter
 {
@@ -23,7 +23,7 @@ public:
     {}
     virtual ~BasicParameter() {}
 
-    virtual parse(int argc, char *argv[]);
+    virtual void parse(int argc, char *argv[]);
 
     float acceptableCorresPointDistThres;
     float corresPointDistThres;

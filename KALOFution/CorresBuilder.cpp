@@ -129,7 +129,8 @@ void CorresBuilder::alignPairs()
             }
         }
 
-        bool accept = count >= m_params.acceptableCorresPointNum || (1. * count / p0->size() && 1. * count / p1->size());
+        bool accept = count >= m_params.acceptableCorresPointNum ||
+            (1. * count / p0->size() && 1. * count / p1->size());
         if (!accept) {
             PCL_INFO("reject\n");
             m_cloudPairs[i].corresIdx = std::make_pair(-1, -1);

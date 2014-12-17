@@ -4,9 +4,9 @@
 #include <pcl/console/parse.h>
 #include <pcl/console/print.h>
 
-using pcl::console;
+using namespace pcl::console;
 
-OptimizerParameter::parse(int argc, char *argv[])
+void OptimizerParameter::parse(int argc, char *argv[])
 {
 
 }

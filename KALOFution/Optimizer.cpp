@@ -149,3 +149,8 @@ void Optimizer::eachCloudPair(CloudPair &pair, Mat &ATA, Vec &ATb, double &align
         align_error += score;
     }
 }
+
+void Optimizer::operator()()
+{
+    optimizeRigid();
+}

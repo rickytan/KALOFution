@@ -92,13 +92,16 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>E:\usr\include;$(PCL_ROOT)\3rdParty\Boost\include;$(PCL_ROOT)\3rdParty\FLANN\include;..\SuiteSparse\Include;$(PCL_ROOT)\include\pcl-1.6;$(OPEN_NI_INCLUDE)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>EIGEN2_SUPPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>E:\Library\OpenCV-2.4.9\opencv\build\include;E:\usr\include;$(PCL_ROOT)\3rdParty\Boost\include;$(PCL_ROOT)\3rdParty\FLANN\include;..\SuiteSparse\Include;$(PCL_ROOT)\include\pcl-1.6;$(OPEN_NI_INCLUDE)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_DEBUG;EIGEN2_SUPPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(PCL_ROOT)\lib;$(PCL_ROOT)\3rdParty\FLANN\lib;$(PCL_ROOT)\3rdParty\Boost\lib;..\SuiteSparse\Lib64;..\METIS\vs2010\Lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>pcl_io_$(Configuration).lib;pcl_common_$(Configuration).lib;pcl_kdtree_$(Configuration).lib;pcl_registration_$(Configuration).lib;pcl_io_ply_$(Configuration).lib;CHOLMOD.lib;SuiteSparse_config.lib;METIS.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(PCL_ROOT)\lib;$(PCL_ROOT)\3rdParty\FLANN\lib;$(PCL_ROOT)\3rdParty\Boost\lib;..\SuiteSparse\Lib64;..\METIS\vs2010\Lib64;E:\Library\OpenCV-2.4.9\opencv\build\x64\vc10\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>pcl_io_$(Configuration).lib;pcl_common_$(Configuration).lib;pcl_kdtree_$(Configuration).lib;pcl_registration_$(Configuration).lib;pcl_io_ply_$(Configuration).lib;CHOLMOD.lib;SuiteSparse_config.lib;METIS.lib;opencv_video249d.lib;opencv_core249d.lib;opencv_highgui249d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>
+      </IgnoreSpecificDefaultLibraries>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -130,13 +133,14 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>pcl_io_$(Configuration).lib;pcl_common_$(Configuration).lib;pcl_kdtree_$(Configuration).lib;pcl_registration_$(Configuration).lib;pcl_io_ply_$(Configuration).lib;CHOLMOD.lib;SuiteSparse_config.lib;METIS.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>pcl_io_$(Configuration).lib;pcl_common_$(Configuration).lib;pcl_kdtree_$(Configuration).lib;pcl_registration_$(Configuration).lib;pcl_io_ply_$(Configuration).lib;CHOLMOD.lib;SuiteSparse_config.lib;METIS.lib;opencv_video249.lib;opencv_core249.lib;opencv_highgui249.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(PCL_ROOT)\lib;$(PCL_ROOT)\3rdParty\FLANN\lib;$(PCL_ROOT)\3rdParty\Boost\lib;..\SuiteSparse\Lib64;..\METIS\vs2010\Lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\ricky%27s work\KALOFution\KALOFution\BasicParameter.h" />
     <ClInclude Include="..\..\..\ricky%27s work\KALOFution\KALOFution\Depth2PLY.h" />
+    <ClInclude Include="..\..\..\ricky%27s work\KALOFution\KALOFution\MP4Dumper.h" />
     <ClInclude Include="..\..\..\ricky%27s work\KALOFution\KALOFution\ONIDumper.h" />
     <ClInclude Include="..\..\..\ricky%27s work\KALOFution\KALOFution\Optimizer.h" />
     <ClInclude Include="..\..\..\ricky%27s work\KALOFution\KALOFution\OptimizerParameter.h" />
@@ -148,6 +152,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\ricky%27s work\KALOFution\KALOFution\BasicParameter.cpp" />
     <ClCompile Include="..\..\..\ricky%27s work\KALOFution\KALOFution\Depth2PLY.cpp" />
+    <ClCompile Include="..\..\..\ricky%27s work\KALOFution\KALOFution\MP4Dumper.cpp" />
     <ClCompile Include="..\..\..\ricky%27s work\KALOFution\KALOFution\ONIDumper.cpp" />
     <ClCompile Include="..\..\..\ricky%27s work\KALOFution\KALOFution\Optimizer.cpp" />
     <ClCompile Include="..\..\..\ricky%27s work\KALOFution\KALOFution\OptimizerParameter.cpp" />
