@@ -11,7 +11,7 @@ class BasicParameter : public Parameter
 {
 public:
     BasicParameter()
-        : acceptableCorresPointDistThres(0.05)
+        : acceptableICPPointDistThres(0.05)
         , corresPointDistThres(0.015)
         , corresPointNormThres(30.f)
         , saveCorresPointIndices(true)
@@ -23,9 +23,10 @@ public:
     {}
     virtual ~BasicParameter() {}
 
+    virtual void help();
     virtual void parse(int argc, char *argv[]);
 
-    float acceptableCorresPointDistThres;
+    float acceptableICPPointDistThres;
     float corresPointDistThres;
     float corresPointNormThres; // 对应点法向角度差
     bool saveCorresPointIndices;

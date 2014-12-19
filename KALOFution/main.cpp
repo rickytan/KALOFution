@@ -10,11 +10,17 @@
 
 #include <pcl/console/parse.h>
 
-void parse_params(BasicParameter& params, int argc, char *argv[])
-{
-    using namespace pcl::console;
+#include <boost/filesystem.hpp>
 
-    parse_argument(argc, argv, "--max_icp_iter", params.maxICPIteration);
+void help()
+{
+    printf("\
+\nSupported command :\n\
+\tbuildcorres : \n\
+\toptimize :    \n\
+\tdumpmap :     \n\
+\n\n\
+use '-run command -h' for details.");
 }
 
 int main(int argc, char *argv[])
@@ -25,7 +31,8 @@ int main(int argc, char *argv[])
 
     std::string sub_prog;
     if (pcl::console::parse(argc, argv, "-run", sub_prog) == -1) {
-        PCL_INFO("Usage:\n\n\t%s -run <sub program>\n", argv[0]);
+        printf("Usage:\n\n\t%s -run <sub program>\n", argv[0]);
+        help();
         return 0;
     }
 
@@ -33,7 +40,12 @@ int main(int argc, char *argv[])
         BasicParameter params;
         params.parse(argc, argv);
 
-        DefaultDataProvider provider(15, "./data", 50);
+        std::string pos_file = "camera_pos.txt";
+        parse_argument(argc, argv, "--pos-file", pos_file);
+
+        DefaultDataProvider provider(48, "./data", 25);
+        provider.setPoseFile(pos_file);
+        provider.prepareData();
         CorresBuilder builder(params);
 
         builder(provider);
@@ -42,8 +54,29 @@ int main(int argc, char *argv[])
         OptimizerParameter oparam;
         oparam.parse(argc, argv);
 
+        DefaultDataProvider provider(48, "./data", 25);
+        std::vector<CloudTypePtr> clouds;
+        for (size_t i = 0; i < provider.size(); ++i) {
+            clouds.push_back(provider[i]);
+        }
+
+        string corres_dir = "./corres";
+
+        std::vector<CloudPair> pairs;
+        char filename[1024] = { 0 };
+        for (size_t i = 0; i < clouds.size(); ++i) {
+            for (size_t j = i + 1; j < clouds.size(); ++j) {
+                sprintf(filename, "%s/corres_%d_%d.txt", corres_dir.c_str(), i, j);
+                if (boost::filesystem::exists(filename)) {
+                    CloudPair pair(i, j);
+                    pair.loadCorresPoints(filename);
+                    pairs.push_back(pair);
+                }
+            }
+        }
+
         Optimizer optimizer(oparam);
-        optimizer();
+        optimizer(clouds, pairs);
     }
     else if (sub_prog == "dumponi") {
         if (argc < 5) {
@@ -62,13 +95,27 @@ int main(int argc, char *argv[])
         dumper.dumpTo(argv[4]);
     }
     else if (sub_prog == "dumpmap") {
-        MapDumper dumper("lab_data", "camera_pos.txt");
-        dumper.setStep(50);
-        dumper.dumpTo(argv[4]);
+        using namespace pcl::console;
+
+        std::string dump_dir = "data";
+        int step = 25;
+        std::string pos_file = "camera_pos.txt";
+        std::string data_dir = "datadump";
+        std::string data_format = "pcd";
+        parse_argument(argc, argv, "--dump-dir", dump_dir);
+        parse_argument(argc, argv, "--step", step);
+        parse_argument(argc, argv, "--pos-file", pos_file);
+        parse_argument(argc, argv, "--data-dir", data_dir);
+        parse_argument(argc, argv, "--format", data_format);
+
+        MapDumper dumper(data_dir, pos_file);
+        dumper.setStep(step);
+        dumper.setDumpFormat(data_format);
+        dumper.dumpTo(dump_dir);
     }
     else {
         PCL_ERROR("Unknown command : %s\n", sub_prog.c_str());
     }
-
+    getchar();
     return 0;
 }

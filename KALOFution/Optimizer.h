@@ -23,11 +23,12 @@ public:
     Optimizer(OptimizerParameter &params);
     ~Optimizer();
 
-    void operator ()();
+    void operator ()(std::vector<CloudTypePtr> &pointClouds, std::vector<CloudPair> &cloudPaire);
 
 private:
     void optimizeRigid();
-    void eachCloudPair(CloudPair &pair, Mat &ATA, Vec &ATb, double &align_error);
+    void eachCloudPair(CloudPair &pair);
+    void mergeClouds();
 private:
     OptimizerParameter &m_params;
 
@@ -35,6 +36,10 @@ private:
     std::vector<CloudPair> m_cloudPairs;
 
     boost::mutex m_cloudPairMutex;
+
+    Mat ATA;
+    Vec ATb;
+    double align_error;
 };
 
 #endif  // _OPTIMIZER_H_

@@ -3,12 +3,14 @@
 
 #include <cstdio>
 #include <cstdlib>
+#include <fstream>
+#include <iostream>
 
 #ifdef WIN32
 
 #endif
 
-
+/*
 namespace Eigen {
     namespace internal {
         static inline double sqrt(double a) { return sqrt(a); }
@@ -16,7 +18,7 @@ namespace Eigen {
         static inline double sin(double a) { return sin(a); }
     }
 }
-
+*/
 
 #include <pcl/point_types.h>
 #include <pcl/point_cloud.h>
@@ -24,7 +26,7 @@ namespace Eigen {
 
 using boost::math::isnan;
 
-typedef pcl::PointXYZRGBNormal PointType;
+typedef pcl::PointXYZINormal PointType;
 typedef pcl::PointCloud<PointType> CloudType;
 typedef pcl::PointCloud<PointType>::Ptr CloudTypePtr;
 typedef std::pair<int, int> PointPair;
@@ -36,10 +38,21 @@ typedef struct CloudPair {
     Eigen::Affine3f relativeTrans;
     int validCorresPointNumber;
     std::vector<PointPair> corresPointIdx;
-    CloudPair(int p, int q, const Eigen::Affine3f& incTrans) {
+    CloudPair(int p, int q, const Eigen::Affine3f& incTrans = Eigen::Affine3f::Identity()) {
         corresIdx = std::make_pair(p, q);
         relativeTrans = incTrans;
         validCorresPointNumber = 0;
+    }
+    void loadCorresPoints(const std::string &file) {
+        PCL_INFO("Loading correspondences : %s\n", file.c_str());
+        std::ifstream infile(file, std::ios::in);
+        if (infile.is_open()) {
+            int p0, p1;
+            while (infile >> p0 >> p1) {
+                corresPointIdx.push_back(std::make_pair(p0, p1));
+            }
+            infile.close();
+        }
     }
     EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 } CloudPair;

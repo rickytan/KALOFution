@@ -33,7 +33,8 @@ private:
     void findCorresPoints();
     void findCorres(CloudPair& pair);
     void alignPairs();
-
+    void alignEachPair(CloudPair &pair);
+    CloudTypePtr downsampledCloudWithNumberOfPoints(CloudTypePtr cloud, int points);
 private:
     std::vector<CloudTypePtr> m_pointClouds;
     std::vector<CloudPair, Eigen::aligned_allocator<CloudPair> > m_cloudPairs;

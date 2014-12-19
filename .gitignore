@@ -31,6 +31,12 @@ local.properties
 
 *.ply
 KALOFution/lab_data/
+KALOFution/datadump/
+KALOFution/data/
+KALOFution/data2/
+KALOFution/data_pcd/
+KALOFution/corres/
+KALOFution/corres2/
 
 #################
 ## Visual Studio

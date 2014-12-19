@@ -8,13 +8,25 @@
 #include <pcl/console/print.h>
 #include <pcl/common/transforms.h>
 #include <pcl/io/ply_io.h>
+#include <pcl/io/pcd_io.h>
 
 #include <boost/thread.hpp>
+#include <boost/filesystem.hpp>
 
 void MapDumper::dumpTo(const string &dump_dir)
 {
-    initPoses();
+    //initPoses();
     m_dumpDir = dump_dir;
+
+    if (boost::filesystem::exists(m_dumpDir)) {
+        if (!boost::filesystem::is_directory(m_dumpDir)) {
+            boost::filesystem::remove(m_dumpDir);
+            boost::filesystem::create_directory(m_dumpDir);
+        }
+    }
+    else {
+        boost::filesystem::create_directory(m_dumpDir);
+    }
 
     int count = 0;
     int cloud_index = 0;
@@ -57,7 +69,15 @@ CloudTypePtr MapDumper::mapToCloud(std::vector<float> &vmap, std::vector<float> 
             if (point.z < m_minDepth || point.z > m_maxDepth) {
                 continue;
             }
-
+            float thre_cos = cosf(m_normAngleThres);
+            if (fabsf(point.normal_z) < thre_cos) {
+                continue;
+            }
+            if (point.normal_z > 0) {
+                point.normal_x = -point.normal_x;
+                point.normal_y = -point.normal_y;
+                point.normal_z = -point.normal_z;
+            }
             cloud->points.push_back(point);
         }
     }
@@ -86,10 +106,15 @@ void MapDumper::forEachMap(int index)
     norm_file.close();
 
     CloudTypePtr cloud = mapToCloud(point_data, norm_data);
-    CloudType transformed;
-    pcl::transformPointCloudWithNormals(*cloud, transformed, m_cameraPoses[index]);
-    sprintf(filename, "%s/cloud_%d.ply", m_dumpDir.c_str(), index++);
-    pcl::io::savePLYFileBinary(filename, transformed);
+    //CloudType transformed;
+    //pcl::transformPointCloudWithNormals(*cloud, transformed, m_cameraPoses[index]);
+    sprintf(filename, "%s/cloud_%d.%s", m_dumpDir.c_str(), index++, m_dumpFormat.c_str());
+    if (m_dumpFormat == "pcd") {
+        pcl::io::savePCDFileBinary(filename, cloud);
+    }
+    else if (m_dumpFormat == "ply") {
+        pcl::io::savePLYFileBinary(filename, cloud);
+    }
 }
 
 void MapDumper::initPoses()
