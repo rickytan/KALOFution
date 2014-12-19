@@ -4,6 +4,7 @@
 #include "CorresBuilder.h"
 #include "ONIDumper.h"
 #include "MP4Dumper.h"
+#include "MapDumper.h"
 #include "OptimizerParameter.h"
 #include "Optimizer.h"
 
@@ -32,7 +33,7 @@ int main(int argc, char *argv[])
         BasicParameter params;
         params.parse(argc, argv);
 
-        DefaultDataProvider provider(10, "./data");
+        DefaultDataProvider provider(15, "./data", 50);
         CorresBuilder builder(params);
 
         builder(provider);
@@ -58,6 +59,11 @@ int main(int argc, char *argv[])
             return 0;
         }
         MP4Dumper dumper(argv[3]);
+        dumper.dumpTo(argv[4]);
+    }
+    else if (sub_prog == "dumpmap") {
+        MapDumper dumper("lab_data", "camera_pos.txt");
+        dumper.setStep(50);
         dumper.dumpTo(argv[4]);
     }
     else {

@@ -37,9 +37,10 @@ class DefaultDataProvider : public DataProvider
 {
 public:
 
-    DefaultDataProvider(uint32_t num, const std::string& data_dir)
+    DefaultDataProvider(uint32_t num, const std::string& data_dir, uint32_t step = 1)
     : m_numberOfClouds(num)
     , m_dataDirectory(data_dir)
+    , m_step(step)
     {}
     virtual ~DefaultDataProvider() {}
     
@@ -63,6 +64,7 @@ private:
 
 private:
     uint32_t m_numberOfClouds;
+    uint32_t m_step;
     std::string m_dataDirectory;
 };
 

@@ -165,7 +165,11 @@ void CorresBuilder::alignPairs()
 void CorresBuilder::findCorresPoints()
 {
     boost::thread_group group;
+    int cores = boost::thread::hardware_concurrency();
     for (size_t i = 0; i < m_cloudPairs.size(); ++i) {
+        if (i % cores == cores - 1) {
+            group.join_all();
+        }
         group.create_thread(boost::bind(&CorresBuilder::findCorres, this, m_cloudPairs[i]));
     }
     group.join_all();
@@ -208,7 +212,7 @@ void CorresBuilder::findCorres(CloudPair& pair)
         }
     }
 
-    PCL_INFO("\t<%d, %d> : Corresponce point number %d", pair.corresIdx.first, pair.corresIdx.second, pointCorrespondence.size());
+    PCL_INFO("\t<%d, %d> : Corresponce point number %d\n", pair.corresIdx.first, pair.corresIdx.second, pointCorrespondence.size());
     if (pair.validCorresPointNumber > 0 && pointCorrespondence.size() < pair.validCorresPointNumber * 0.5) {
         PCL_INFO("\tReduced too much!\n");
         pair.corresIdx = std::make_pair(-1, -1);

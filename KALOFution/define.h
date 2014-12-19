@@ -20,6 +20,9 @@ namespace Eigen {
 
 #include <pcl/point_types.h>
 #include <pcl/point_cloud.h>
+#include <boost/math/special_functions.hpp>
+
+using boost::math::isnan;
 
 typedef pcl::PointXYZRGBNormal PointType;
 typedef pcl::PointCloud<PointType> CloudType;

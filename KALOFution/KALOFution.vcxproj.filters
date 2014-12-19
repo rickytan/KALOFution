@@ -45,6 +45,9 @@
     <ClInclude Include="..\..\..\ricky%27s work\KALOFution\KALOFution\MP4Dumper.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\ricky%27s work\KALOFution\KALOFution\MapDumper.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include=".\CorresBuilder.cpp">
@@ -75,6 +78,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\ricky%27s work\KALOFution\KALOFution\MP4Dumper.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ricky%27s work\KALOFution\KALOFution\MapDumper.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

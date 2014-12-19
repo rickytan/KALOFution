@@ -134,12 +134,13 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>pcl_io_$(Configuration).lib;pcl_common_$(Configuration).lib;pcl_kdtree_$(Configuration).lib;pcl_registration_$(Configuration).lib;pcl_io_ply_$(Configuration).lib;CHOLMOD.lib;SuiteSparse_config.lib;METIS.lib;opencv_video249.lib;opencv_core249.lib;opencv_highgui249.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(PCL_ROOT)\lib;$(PCL_ROOT)\3rdParty\FLANN\lib;$(PCL_ROOT)\3rdParty\Boost\lib;..\SuiteSparse\Lib64;..\METIS\vs2010\Lib64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(PCL_ROOT)\lib;$(PCL_ROOT)\3rdParty\FLANN\lib;$(PCL_ROOT)\3rdParty\Boost\lib;..\SuiteSparse\Lib64;..\METIS\vs2010\Lib64;E:\Library\OpenCV-2.4.9\opencv\build\x64\vc10\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\ricky%27s work\KALOFution\KALOFution\BasicParameter.h" />
     <ClInclude Include="..\..\..\ricky%27s work\KALOFution\KALOFution\Depth2PLY.h" />
+    <ClInclude Include="..\..\..\ricky%27s work\KALOFution\KALOFution\MapDumper.h" />
     <ClInclude Include="..\..\..\ricky%27s work\KALOFution\KALOFution\MP4Dumper.h" />
     <ClInclude Include="..\..\..\ricky%27s work\KALOFution\KALOFution\ONIDumper.h" />
     <ClInclude Include="..\..\..\ricky%27s work\KALOFution\KALOFution\Optimizer.h" />
@@ -152,6 +153,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\ricky%27s work\KALOFution\KALOFution\BasicParameter.cpp" />
     <ClCompile Include="..\..\..\ricky%27s work\KALOFution\KALOFution\Depth2PLY.cpp" />
+    <ClCompile Include="..\..\..\ricky%27s work\KALOFution\KALOFution\MapDumper.cpp" />
     <ClCompile Include="..\..\..\ricky%27s work\KALOFution\KALOFution\MP4Dumper.cpp" />
     <ClCompile Include="..\..\..\ricky%27s work\KALOFution\KALOFution\ONIDumper.cpp" />
     <ClCompile Include="..\..\..\ricky%27s work\KALOFution\KALOFution\Optimizer.cpp" />

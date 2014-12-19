@@ -30,6 +30,7 @@ local.properties
 
 
 *.ply
+KALOFution/lab_data/
 
 #################
 ## Visual Studio
