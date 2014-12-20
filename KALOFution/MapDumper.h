@@ -8,14 +8,17 @@
 
 #include "define.h"
 
+#include <boost/thread.hpp>
+
+class boost::mutex;
+
 using namespace std;
 
 class MapDumper
 {
 public:
-    MapDumper(const string &map_dir, const string &posfile)
+    MapDumper(const string &map_dir)
         : m_mapDir(map_dir)
-        , m_posFile(posfile)
         , m_dumpStep(1)
         , m_minDepth(0.3)
         , m_maxDepth(3)
@@ -33,16 +36,17 @@ public:
 private:
     CloudTypePtr mapToCloud(std::vector<float> &vmap, std::vector<float> &nmap);
     void forEachMap(int map_file_index);
-    void initPoses();
+
 private:
     string m_mapDir;
-    string m_posFile;
     string m_dumpDir;
     string m_dumpFormat;
     int m_dumpStep;
     std::vector<Eigen::Affine3f> m_cameraPoses;
     float m_minDepth, m_maxDepth;
     float m_normAngleThres;     // the angle between norm and view direction
+
+    boost::mutex m_outputMutex;
 };
 
 #endif  // _MAPDUMPER_H_

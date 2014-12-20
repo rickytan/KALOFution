@@ -30,11 +30,14 @@ public:
     const uint32_t size();
     CloudTypePtr operator [](uint32_t index) { return getCloudAtIndex(index); }
 
-    virtual void prepareData() {}   // override me!!!
+    virtual void prepareData() { m_dataInitailized = true; }   // override me!!!
 
     virtual const uint32_t numberOfClouds() = 0;
     virtual CloudTypePtr getCloudAtIndex(uint32_t index) = 0;
     virtual const Eigen::Affine3f initTransformOfCloudAtIndex(uint32_t index) = 0;
+
+protected:
+    bool m_dataInitailized;
 };
 
 class DefaultDataProvider : public DataProvider
@@ -75,7 +78,7 @@ public:
     void setPoseFile(const std::string &file) { m_posFile = file; }
 private:
     const std::string filenameOfCloudAtIndex(uint32_t index);
-    void initPose();
+    void initPoses();
 
 private:
     string m_format;

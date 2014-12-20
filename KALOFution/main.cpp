@@ -23,6 +23,8 @@ void help()
 use '-run command -h' for details.");
 }
 
+using namespace pcl::console;
+
 int main(int argc, char *argv[])
 {
     std::string program(argv[0]);
@@ -41,9 +43,15 @@ int main(int argc, char *argv[])
         params.parse(argc, argv);
 
         std::string pos_file = "camera_pos.txt";
+        std::string data_dir = "./data";
+        int size = 48;
+        int step = 25;
         parse_argument(argc, argv, "--pos-file", pos_file);
+        parse_argument(argc, argv, "--cloud-num", size);
+        parse_argument(argc, argv, "--step", step);
+        parse_argument(argc, argv, "--data-dir", data_dir);
 
-        DefaultDataProvider provider(48, "./data", 25);
+        DefaultDataProvider provider(size, data_dir, step);
         provider.setPoseFile(pos_file);
         provider.prepareData();
         CorresBuilder builder(params);
@@ -99,16 +107,14 @@ int main(int argc, char *argv[])
 
         std::string dump_dir = "data";
         int step = 25;
-        std::string pos_file = "camera_pos.txt";
         std::string data_dir = "datadump";
         std::string data_format = "pcd";
         parse_argument(argc, argv, "--dump-dir", dump_dir);
         parse_argument(argc, argv, "--step", step);
-        parse_argument(argc, argv, "--pos-file", pos_file);
         parse_argument(argc, argv, "--data-dir", data_dir);
         parse_argument(argc, argv, "--format", data_format);
 
-        MapDumper dumper(data_dir, pos_file);
+        MapDumper dumper(data_dir);
         dumper.setStep(step);
         dumper.setDumpFormat(data_format);
         dumper.dumpTo(dump_dir);
