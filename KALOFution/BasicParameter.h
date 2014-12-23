@@ -19,7 +19,8 @@ public:
         , cloudPairNeedAlignment(true)
         , acceptableCorresPointNum(40000)
         , acceptableCorresPointRatio(0.3)
-        , translationThres(0.3)
+        , translationThres(0.24)
+        , rotationThres(15)
         , maxICPIteration(50)
     {}
     virtual ~BasicParameter() {}
@@ -28,6 +29,8 @@ public:
     virtual void parse(int argc, char *argv[]);
 
     float translationThres;
+    float rotationThres;
+
     float acceptableICPPointDistThres;
     float corresPointDistThres;
     float corresPointNormThres; // 对应点法向角度差

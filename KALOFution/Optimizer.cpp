@@ -105,11 +105,11 @@ void Optimizer::optimizeRigid()
         std::ofstream("debug_matrix.txt", std::ios::out) << ATA;
         std::ofstream("debug_b.txt", std::ios::out) << ATb;
 
-        //Eigen::SimplicialCholesky<Mat> solver(ATA);
+        Eigen::SimplicialCholesky<Mat> solver(ATA);
         
-        Eigen::CholmodSupernodalLLT<Mat, Eigen::Upper> solver;
-        solver.analyzePattern(ATA);
-        solver.factorize(ATA);
+        //Eigen::CholmodSupernodalLLT<Mat, Eigen::Upper> solver;
+        //solver.analyzePattern(ATA);
+        //solver.factorize(ATA);
         
         Vec X = solver.solve(ATb);
 

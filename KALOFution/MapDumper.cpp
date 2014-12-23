@@ -27,7 +27,7 @@ void MapDumper::dumpTo(const string &dump_dir)
 
     using namespace boost::filesystem;
 
-    int count = 0;
+    int map_index = 0;
     int cloud_index = 0;
     size_t total = m_cameraPoses.size() ? m_cameraPoses.size() : std::count_if(
         directory_iterator(m_mapDir),
@@ -36,8 +36,15 @@ void MapDumper::dumpTo(const string &dump_dir)
 
     boost::thread_group group;
 
-    for (; count + m_dumpStep < total; count += m_dumpStep) {
-        group.create_thread(boost::bind(&MapDumper::forEachMap, this, count));
+    int cpu_cores = std::max(boost::thread::hardware_concurrency(), (unsigned)2);
+    int count = 0;
+    for (; map_index + m_dumpStep < total; map_index += m_dumpStep) {
+        if (count == cpu_cores) {
+            count = 0;
+            group.join_all();
+        }
+        group.create_thread(boost::bind(&MapDumper::forEachMap, this, map_index));
+        ++count;
     }
     group.join_all();
 }
@@ -60,6 +67,7 @@ CloudTypePtr MapDumper::mapToCloud(std::vector<float> &vmap, std::vector<float> 
             PointType point;
             point.normal_x = nmap[640 * (0 * 480 + row) + col];
             if (isnan(point.normal_x)) {
+                ++invalid_norm_count;
                 continue;
             }
             point.normal_y = nmap[640 * (1 * 480 + row) + col];

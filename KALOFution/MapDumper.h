@@ -21,7 +21,7 @@ public:
         : m_mapDir(map_dir)
         , m_dumpStep(1)
         , m_minDepth(0.3)
-        , m_maxDepth(3)
+        , m_maxDepth(2.4)
         , m_dumpFormat("pcd")
         , m_normAngleThres(80)
     {}

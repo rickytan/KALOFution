@@ -295,10 +295,18 @@ void CorresBuilder::alignEachPair(CloudPair &pair)
         if (changed.translation().maxCoeff() > m_params.translationThres || changed.translation().minCoeff() < -m_params.translationThres) {
             PCL_WARN("Pair align translate too much!! Reject\n");
             pair.corresIdx = std::make_pair(-1, -1);
+            return;
         }
-        else {
-            pair.relativeTrans = icp.getFinalTransformation();
+
+        Eigen::AngleAxisf angle;
+        angle.fromRotationMatrix(changed.linear());
+        if (fabsf(angle.angle()) > m_params.rotationThres * M_PI / 180) {
+            PCL_WARN("Pair align rotate too much!! Reject\n");
+            pair.corresIdx = std::make_pair(-1, -1);
+            return;
         }
+
+        pair.relativeTrans = icp.getFinalTransformation();
     }
     else {
         PCL_WARN("\tCan't align pair <%d, %d>\n", pair.corresIdx.first, pair.corresIdx.second);
