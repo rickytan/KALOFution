@@ -10,13 +10,10 @@
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
 
-#include <boost/math/special_functions.hpp>
-
 #define KINECT_DEFAULT_DEPTH_FOCAL_X    (575.816f)
 #define KINECT_DEFAULT_DEPTH_FOCAL_Y    (575.816f)
 
 typedef pcl::PointXYZ Point;
-
 
 class Depth2PLY
 {
@@ -31,7 +28,6 @@ public:
     }
     template<typename DepthType>
     CloudTypePtr operator ()(int width, int height, DepthType *depth, int stride) {
-        using namespace boost::math;
 
         m_width = width;
         m_height = height;
@@ -45,13 +41,13 @@ public:
             for (int col = 0; col < width - 1; ++col) {
                 DepthType d = depth[row * stride + col];
                 Point p00 = uvd2point(col, row, d);
-                if (isnan(p00.x))
+                if (pcl_isnan(p00.x))
                     continue;
                 Point p01 = uvd2point(col + 1, row, d);
-                if (isnan(p01))
+                if (pcl_isnan(p01.x))
                     continue;
                 Point p10 = uvd2point(col, row + 1, d);
-                if (isnan(p10))
+                if (pcl_isnan(p10.x))
                     continue;
                 PointType point;
                 point.x = p00.x;
