@@ -15,7 +15,9 @@ const Eigen::Affine3f DefaultDataProvider::initTransformOfCloudAtIndex(uint32_t 
     if (!m_dataInitailized) {
         prepareData();
     }
-    return m_cameraPoses[index * m_step];
+    if (index * m_step < m_cameraPoses.size())
+        return  m_cameraPoses[index * m_step];
+    return Eigen::Affine3f::Identity();
 }
 
 const std::string DefaultDataProvider::filenameOfCloudAtIndex(uint32_t index)
@@ -27,7 +29,8 @@ const std::string DefaultDataProvider::filenameOfCloudAtIndex(uint32_t index)
 
 void DefaultDataProvider::prepareData()
 {
-    initPoses();
+    if (!m_posFile.empty())
+        initPoses();
     DataProvider::prepareData();
 }
 

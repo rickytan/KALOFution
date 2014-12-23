@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
         BasicParameter params;
         params.parse(argc, argv);
 
-        std::string pos_file = "camera_pos.txt";
+        std::string pos_file = "";
         std::string data_dir = "./data";
         int size = 48;
         int step = 25;
@@ -62,13 +62,25 @@ int main(int argc, char *argv[])
         OptimizerParameter oparam;
         oparam.parse(argc, argv);
 
-        DefaultDataProvider provider(48, "./data", 25);
+        std::string pos_file = "";
+        std::string data_dir = "./data";
+        int size = 48;
+        int step = 25;
+        parse_argument(argc, argv, "--pos-file", pos_file);
+        parse_argument(argc, argv, "--cloud-num", size);
+        parse_argument(argc, argv, "--step", step);
+        parse_argument(argc, argv, "--data-dir", data_dir);
+
+        DefaultDataProvider provider(size, data_dir, step);
+        provider.setPoseFile(pos_file);
+        provider.prepareData();
         std::vector<CloudTypePtr> clouds;
         for (size_t i = 0; i < provider.size(); ++i) {
             clouds.push_back(provider[i]);
         }
 
         string corres_dir = "./corres";
+        parse_argument(argc, argv, "--corres-dir", corres_dir);
 
         std::vector<CloudPair> pairs;
         char filename[1024] = { 0 };
@@ -78,7 +90,8 @@ int main(int argc, char *argv[])
                 if (boost::filesystem::exists(filename)) {
                     CloudPair pair(i, j);
                     pair.loadCorresPoints(filename);
-                    pairs.push_back(pair);
+                    if (pair.corresPointIdx.size())
+                        pairs.push_back(pair);
                 }
             }
         }
@@ -105,23 +118,28 @@ int main(int argc, char *argv[])
     else if (sub_prog == "dumpmap") {
         using namespace pcl::console;
 
-        std::string dump_dir = "data";
+        std::string dump_dir = "./data";
         int step = 25;
-        std::string data_dir = "datadump";
+        std::string data_dir = "./datadump";
         std::string data_format = "pcd";
+        std::string pos_file = "";
         parse_argument(argc, argv, "--dump-dir", dump_dir);
         parse_argument(argc, argv, "--step", step);
         parse_argument(argc, argv, "--data-dir", data_dir);
         parse_argument(argc, argv, "--format", data_format);
+        parse_argument(argc, argv, "--pos-file", pos_file);
 
         MapDumper dumper(data_dir);
         dumper.setStep(step);
         dumper.setDumpFormat(data_format);
+        dumper.setCameraPosFile(pos_file);
         dumper.dumpTo(dump_dir);
     }
     else {
         PCL_ERROR("Unknown command : %s\n", sub_prog.c_str());
     }
+
+    PCL_WARN("DONE!!! Press any key to exit.");
     getchar();
     return 0;
 }

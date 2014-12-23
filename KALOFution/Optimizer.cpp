@@ -105,12 +105,12 @@ void Optimizer::optimizeRigid()
         std::ofstream("debug_matrix.txt", std::ios::out) << ATA;
         std::ofstream("debug_b.txt", std::ios::out) << ATb;
 
-        Eigen::SimplicialCholesky<Mat> solver(ATA);
-        /*
+        //Eigen::SimplicialCholesky<Mat> solver(ATA);
+        
         Eigen::CholmodSupernodalLLT<Mat, Eigen::Upper> solver;
         solver.analyzePattern(ATA);
         solver.factorize(ATA);
-        */
+        
         Vec X = solver.solve(ATb);
 
         //std::cout << "Result :\n\n" << X << std::endl << std::endl;
@@ -136,7 +136,7 @@ void Optimizer::optimizeRigid()
         if (boost::filesystem::exists(m_params.saveDirectory) && !boost::filesystem::is_directory(m_params.saveDirectory)) {
             boost::filesystem::remove(m_params.saveDirectory);
         }
-        boost::filesystem::create_directory(m_params.saveDirectory);
+        boost::filesystem::create_directories(m_params.saveDirectory);
 
         char filename[1024] = { 0 };
         for (size_t i = 0; i < m_pointClouds.size(); ++i) {

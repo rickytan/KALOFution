@@ -107,6 +107,7 @@ void CorresBuilder::initCloudPair()
 
 void CorresBuilder::alignPairs()
 {
+    
     int cpu_cores = std::max(boost::thread::hardware_concurrency(), (unsigned)2);
     int count = 0;
     boost::thread_group group;
@@ -119,17 +120,28 @@ void CorresBuilder::alignPairs()
         count++;
     }
     group.join_all();
+    
+    /*
+    BOOST_FOREACH(CloudPair &pair, m_cloudPairs) {
+        alignEachPair(pair);
+    }
+     */
 }
 
 void CorresBuilder::findCorresPoints()
 {
     boost::thread_group group;
-    int cores = boost::thread::hardware_concurrency();
+    int cores = std::max(boost::thread::hardware_concurrency(), (unsigned)2);
+    int count = 0;
     for (size_t i = 0; i < m_cloudPairs.size(); ++i) {
-        if (i % cores == cores - 1) {
+        if (count == cores) {
+            count = 0;
             group.join_all();
         }
-        group.create_thread(boost::bind(&CorresBuilder::findCorres, this, m_cloudPairs[i]));
+        if (m_cloudPairs[i].corresIdx != std::make_pair(-1, -1)) {
+            group.create_thread(boost::bind(&CorresBuilder::findCorres, this, m_cloudPairs[i]));
+            count++;
+        }
     }
     group.join_all();
 }
@@ -180,7 +192,7 @@ void CorresBuilder::findCorres(CloudPair& pair)
         pair.validCorresPointNumber = pointCorrespondence.size();
     }
 
-    if (m_params.saveCorresPointIndices) {
+    if (m_params.saveCorresPointIndices && pair.corresIdx != std::make_pair(-1, -1)) {
         char file[1024] = { 0 };
         sprintf(file, "%s/corres_%d_%d.txt", m_params.corresPointSavePath.c_str(), pair.corresIdx.first, pair.corresIdx.second);
         ofstream fs;
@@ -270,14 +282,26 @@ void CorresBuilder::alignEachPair(CloudPair &pair)
     icp.align(*transformed, pair.relativeTrans.matrix());
 
     if (icp.hasConverged()) {
+        boost::mutex::scoped_lock lock(m_outputMutex);
+
         PCL_INFO("\t<%d, %d> : ICP fitness score is %.6f\n", pair.corresIdx.first, pair.corresIdx.second, icp.getFitnessScore());
         PCL_INFO("\tTransform matrix from :\n");
         cout << pair.relativeTrans.matrix() << endl;
         PCL_INFO("\tto:\n");
-        pair.relativeTrans = icp.getFinalTransformation();
-        cout << pair.relativeTrans.matrix() << endl;
+        cout << icp.getFinalTransformation() << endl;
+
+        Eigen::Affine3f changed;
+        changed = pair.relativeTrans.matrix().inverse() * icp.getFinalTransformation();
+        if (changed.translation().maxCoeff() > m_params.translationThres || changed.translation().minCoeff() < -m_params.translationThres) {
+            PCL_WARN("Pair align translate too much!! Reject\n");
+            pair.corresIdx = std::make_pair(-1, -1);
+        }
+        else {
+            pair.relativeTrans = icp.getFinalTransformation();
+        }
     }
     else {
         PCL_WARN("\tCan't align pair <%d, %d>\n", pair.corresIdx.first, pair.corresIdx.second);
+        pair.corresIdx = std::make_pair(-1, -1);
     }
 }

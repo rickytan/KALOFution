@@ -19,15 +19,10 @@ void BasicParameter::parse(int argc, char *argv[])
     parse_argument(argc, argv, "--valid-pair-dist-thres", acceptableICPPointDistThres);
     parse_argument(argc, argv, "--save-path", corresPointSavePath);
 
-    if (boost::filesystem::exists(corresPointSavePath)) {
-        if (!boost::filesystem::is_directory(corresPointSavePath)) {
-            boost::filesystem::remove(corresPointSavePath);
-            boost::filesystem::create_directory(corresPointSavePath);
-        }
+    if (boost::filesystem::exists(corresPointSavePath) && !boost::filesystem::is_directory(corresPointSavePath)) {
+        boost::filesystem::remove(corresPointSavePath);
     }
-    else {
-        boost::filesystem::create_directory(corresPointSavePath);
-    }
+    boost::filesystem::create_directories(corresPointSavePath);
 }
 
 void BasicParameter::help()

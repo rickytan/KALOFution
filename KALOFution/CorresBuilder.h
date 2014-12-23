@@ -13,6 +13,8 @@
 #include <pcl/point_types.h>
 #include <pcl/kdtree/kdtree_flann.h>
 
+#include <boost/thread.hpp>
+
 #include "BasicParameter.h"
 
 class DataProvider;
@@ -41,6 +43,8 @@ private:
     std::vector<CloudTransform, Eigen::aligned_allocator<CloudTransform> > m_initCloudTransform;
 
     BasicParameter &m_params;
+
+    boost::mutex m_outputMutex;
 };
 
 #endif  // _CORRESBUILDER_H_

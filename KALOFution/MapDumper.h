@@ -32,15 +32,17 @@ public:
     void setMaxClipDepth(float depth) { m_maxDepth = depth; }
     void setMinClipDepth(float depth) { m_minDepth = depth; }
     void setDumpFormat(const string &fmt) { m_dumpFormat = fmt; }
+    void setCameraPosFile(const string &file) { m_cameraPosFile = file; }
 
 private:
     CloudTypePtr mapToCloud(std::vector<float> &vmap, std::vector<float> &nmap);
     void forEachMap(int map_file_index);
-
+    void initPoses();
 private:
     string m_mapDir;
     string m_dumpDir;
     string m_dumpFormat;
+    string m_cameraPosFile;
     int m_dumpStep;
     std::vector<Eigen::Affine3f> m_cameraPoses;
     float m_minDepth, m_maxDepth;

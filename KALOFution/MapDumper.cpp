@@ -15,22 +15,25 @@
 
 void MapDumper::dumpTo(const string &dump_dir)
 {
-    //initPoses();
+    if (m_cameraPosFile.length())
+        initPoses();
+
     m_dumpDir = dump_dir;
 
-    if (boost::filesystem::exists(m_dumpDir)) {
-        if (!boost::filesystem::is_directory(m_dumpDir)) {
+    if (boost::filesystem::exists(m_dumpDir) && !boost::filesystem::is_directory(m_dumpDir)) {
             boost::filesystem::remove(m_dumpDir);
-            boost::filesystem::create_directory(m_dumpDir);
-        }
     }
-    else {
-        boost::filesystem::create_directory(m_dumpDir);
-    }
+    boost::filesystem::create_directories(m_dumpDir);
+
+    using namespace boost::filesystem;
 
     int count = 0;
     int cloud_index = 0;
-    size_t total = m_cameraPoses.size();
+    size_t total = m_cameraPoses.size() ? m_cameraPoses.size() : std::count_if(
+        directory_iterator(m_mapDir),
+        directory_iterator(),
+        boost::bind(static_cast<bool(*)(const path&)>(is_regular_file), boost::bind(&directory_entry::path, _1))) / 2;
+
     boost::thread_group group;
 
     for (; count + m_dumpStep < total; count += m_dumpStep) {
@@ -125,13 +128,38 @@ void MapDumper::forEachMap(int index)
     norm_file.close();
 
     CloudTypePtr cloud = mapToCloud(point_data, norm_data);
-    //CloudType transformed;
-    //pcl::transformPointCloudWithNormals(*cloud, transformed, m_cameraPoses[index]);
+    CloudTypePtr transformed = cloud;
+    if (m_cameraPoses.size() > index) {
+        transformed.reset(new CloudType);
+        pcl::transformPointCloudWithNormals(*cloud, *transformed, m_cameraPoses[index]);
+    }
     sprintf(filename, "%s/cloud_%d.%s", m_dumpDir.c_str(), index++, m_dumpFormat.c_str());
     if (m_dumpFormat == "pcd") {
-        pcl::io::savePCDFileBinary(filename, *cloud);
+        pcl::io::savePCDFileBinary(filename, *transformed);
     }
     else if (m_dumpFormat == "ply") {
-        pcl::io::savePLYFileBinary(filename, *cloud);
+        pcl::io::savePLYFileBinary(filename, *transformed);
     }
+}
+
+void MapDumper::initPoses()
+{
+    m_cameraPoses.clear();
+
+    FILE *fp = fopen(m_cameraPosFile.c_str(), "r");
+    if (!fp) {
+        PCL_ERROR("Can't open file : %s\n", m_cameraPosFile.c_str());
+        exit(-1);
+    }
+    while (!feof(fp)) {
+        float tx, ty, tz, w, x, y, z;
+        fscanf(fp, "%f, %f, %f, %f, %f, %f, %f", &tx, &ty, &tz, &w, &x, &y, &z);
+        Eigen::Vector3f trans(tx, ty, tz);
+        Eigen::Quaternionf rot(w, x, y, z);
+        Eigen::Affine3f affine;
+        affine.linear() = rot.toRotationMatrix();
+        affine.translation() = trans;
+        m_cameraPoses.push_back(affine);
+    }
+    fclose(fp);
 }
