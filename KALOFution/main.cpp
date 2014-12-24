@@ -9,6 +9,7 @@
 #include "Optimizer.h"
 
 #include <pcl/console/parse.h>
+#include <pcl/common/transforms.h>
 
 #include <boost/filesystem.hpp>
 
@@ -76,7 +77,9 @@ int main(int argc, char *argv[])
         provider.prepareData();
         std::vector<CloudTypePtr> clouds;
         for (size_t i = 0; i < provider.size(); ++i) {
-            clouds.push_back(provider[i]);
+            CloudTypePtr trans(new CloudType);
+            pcl::transformPointCloudWithNormals(*provider[i], *trans, provider.initTransformOfCloudAtIndex(i));
+            clouds.push_back(trans);
         }
 
         string corres_dir = "./corres";
