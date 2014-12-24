@@ -123,16 +123,26 @@ int main(int argc, char *argv[])
         std::string data_dir = "./datadump";
         std::string data_format = "pcd";
         std::string pos_file = "";
+        float min_clip = 0.3;
+        float max_clip = 2.4;
         parse_argument(argc, argv, "--dump-dir", dump_dir);
         parse_argument(argc, argv, "--step", step);
         parse_argument(argc, argv, "--data-dir", data_dir);
         parse_argument(argc, argv, "--format", data_format);
-        parse_argument(argc, argv, "--pos-file", pos_file);
 
         MapDumper dumper(data_dir);
         dumper.setStep(step);
         dumper.setDumpFormat(data_format);
-        dumper.setCameraPosFile(pos_file);
+        
+        if (parse_argument(argc, argv, "--pos-file", pos_file) >= 0) {
+            dumper.setCameraPosFile(pos_file);
+        }
+        if (parse_argument(argc, argv, "--min-clip", min_clip) >= 0) {
+            dumper.setMinClipDepth(min_clip);
+        }
+        if (parse_argument(argc, argv, "--max-clip", max_clip) >= 0) {
+            dumper.setMaxClipDepth(max_clip);
+        }
         dumper.dumpTo(dump_dir);
     }
     else {

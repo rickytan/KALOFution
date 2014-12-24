@@ -90,7 +90,7 @@ void Optimizer::optimizeRigid()
                 count = 0;
                 group.join_all();
             }
-            group.create_thread(boost::bind(&Optimizer::eachCloudPair, this, m_cloudPairs[pair_count]));
+            group.create_thread(boost::bind(&Optimizer::eachCloudPair, this, boost::ref(m_cloudPairs[pair_count])));
             count++;
         }
         group.join_all();
@@ -102,17 +102,20 @@ void Optimizer::optimizeRigid()
         PCL_WARN("\tDone!\n");
         PCL_WARN("\tAlign error : %.6f\n", align_error);
 
+        Eigen::IOFormat format(Eigen::FullPrecision, 0);
         std::ofstream("debug_matrix.txt", std::ios::out) << ATA;
-        std::ofstream("debug_b.txt", std::ios::out) << ATb;
+        std::ofstream("debug_b.txt", std::ios::out) << ATb.format(format);
 
         Eigen::SimplicialCholesky<Mat> solver(ATA);
         
-        //Eigen::CholmodSupernodalLLT<Mat, Eigen::Upper> solver;
+        //Eigen::CholmodSupernodalLLT<Mat> solver;
         //solver.analyzePattern(ATA);
         //solver.factorize(ATA);
+        //solver.compute(ATA);
         
         Vec X = solver.solve(ATb);
 
+        std::ofstream("debug_result.txt", std::ios::out) << X.format(format);
         //std::cout << "Result :\n\n" << X << std::endl << std::endl;
 
         for (size_t i = 0; i < num_clouds; ++i) {

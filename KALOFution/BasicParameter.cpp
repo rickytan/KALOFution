@@ -17,7 +17,7 @@ void BasicParameter::parse(int argc, char *argv[])
     parse_argument(argc, argv, "--angle-thres", corresPointNormThres);
     parse_argument(argc, argv, "--icp-itera", maxICPIteration);
     parse_argument(argc, argv, "--valid-pair-dist-thres", acceptableICPPointDistThres);
-    parse_argument(argc, argv, "--save-path", corresPointSavePath);
+    parse_argument(argc, argv, "--save-to", corresPointSavePath);
 
     if (boost::filesystem::exists(corresPointSavePath) && !boost::filesystem::is_directory(corresPointSavePath)) {
         boost::filesystem::remove(corresPointSavePath);

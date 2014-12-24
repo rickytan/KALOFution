@@ -116,7 +116,7 @@ void CorresBuilder::alignPairs()
             count = 0;
             group.join_all();
         }
-        group.create_thread(boost::bind(&CorresBuilder::alignEachPair, this, pair));
+        group.create_thread(boost::bind(&CorresBuilder::alignEachPair, this, boost::ref(pair)));
         count++;
     }
     group.join_all();
@@ -139,7 +139,7 @@ void CorresBuilder::findCorresPoints()
             group.join_all();
         }
         if (m_cloudPairs[i].corresIdx != std::make_pair(-1, -1)) {
-            group.create_thread(boost::bind(&CorresBuilder::findCorres, this, m_cloudPairs[i]));
+            group.create_thread(boost::bind(&CorresBuilder::findCorres, this, boost::ref(m_cloudPairs[i])));
             count++;
         }
     }
@@ -183,9 +183,9 @@ void CorresBuilder::findCorres(CloudPair& pair)
         }
     }
 
-    PCL_INFO("\t<%d, %d> : Corresponce point number %d\n", pair.corresIdx.first, pair.corresIdx.second, pointCorrespondence.size());
-    if (pair.validCorresPointNumber > 0 && pointCorrespondence.size() < pair.validCorresPointNumber * 0.5) {
-        PCL_INFO("\tReduced too much!\n");
+    PCL_INFO("\t<%d, %d> : Corresponce point number %d / %d\n", pair.corresIdx.first, pair.corresIdx.second, pointCorrespondence.size(), pair.validCorresPointNumber);
+    if (pair.validCorresPointNumber > 0 && (pointCorrespondence.size() < pair.validCorresPointNumber / 2)) {
+        PCL_WARN("\tReduced too much!\n");
         pair.corresIdx = std::make_pair(-1, -1);
     }
     else {
@@ -238,8 +238,8 @@ void CorresBuilder::alignEachPair(CloudPair &pair)
 
     PCL_INFO("Align pair <%d, %d>\n", pair.corresIdx.first, pair.corresIdx.second);
 
-    CloudTypePtr p0 = m_pointClouds[pair.corresIdx.first];
-    CloudTypePtr p1 = m_pointClouds[pair.corresIdx.second];
+    CloudTypePtr p0 = downsampledCloudWithNumberOfPoints(m_pointClouds[pair.corresIdx.first], 200000);
+    CloudTypePtr p1 = downsampledCloudWithNumberOfPoints(m_pointClouds[pair.corresIdx.second], 200000);
 
     CloudTypePtr transformed(new CloudType);
     pcl::transformPointCloudWithNormals(*p1, *transformed, pair.relativeTrans);
@@ -273,8 +273,8 @@ void CorresBuilder::alignEachPair(CloudPair &pair)
     typedef pcl::registration::TransformationEstimationPointToPlaneLLS<PointType, PointType> P2PlaneEstimation;
     boost::shared_ptr<P2PlaneEstimation> point_to_plane(new P2PlaneEstimation);
 
-    icp.setInputCloud(downsampledCloudWithNumberOfPoints(p1, 15000));
-    icp.setInputTarget(downsampledCloudWithNumberOfPoints(p0, 15000));
+    icp.setInputCloud(downsampledCloudWithNumberOfPoints(p1, 10000));
+    icp.setInputTarget(downsampledCloudWithNumberOfPoints(p0, 10000));
     icp.setMaxCorrespondenceDistance(m_params.acceptableICPPointDistThres);
     icp.setMaximumIterations(m_params.maxICPIteration);
     icp.setTransformationEpsilon(1e-6);

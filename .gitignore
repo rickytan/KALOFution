@@ -37,6 +37,9 @@ KALOFution/data2/
 KALOFution/data_pcd/
 KALOFution/corres/
 KALOFution/corres2/
+KALOFution/aligned-cloud/
+KALOFution/unaligned-cloud/
+KALOFution/cloud-corres/
 
 #################
 ## Visual Studio

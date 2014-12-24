@@ -74,6 +74,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>$(IncludePath)</IncludePath>
+    <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -130,12 +131,14 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>E:\usr\include;$(PCL_ROOT)\3rdParty\Boost\include;$(PCL_ROOT)\3rdParty\FLANN\include;..\SuiteSparse\Include;$(PCL_ROOT)\include\pcl-1.6;$(OPEN_NI_INCLUDE)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>pcl_io_$(Configuration).lib;pcl_common_$(Configuration).lib;pcl_kdtree_$(Configuration).lib;pcl_registration_$(Configuration).lib;pcl_io_ply_$(Configuration).lib;CHOLMOD.lib;SuiteSparse_config.lib;METIS.lib;opencv_video249.lib;opencv_core249.lib;opencv_highgui249.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>pcl_io_$(Configuration).lib;pcl_common_$(Configuration).lib;pcl_kdtree_$(Configuration).lib;pcl_registration_$(Configuration).lib;pcl_io_ply_$(Configuration).lib;CHOLMOD.lib;opencv_video249.lib;opencv_core249.lib;opencv_highgui249.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(PCL_ROOT)\lib;$(PCL_ROOT)\3rdParty\FLANN\lib;$(PCL_ROOT)\3rdParty\Boost\lib;..\SuiteSparse\Lib64;..\METIS\vs2010\Lib64;E:\Library\OpenCV-2.4.9\opencv\build\x64\vc10\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
