@@ -97,7 +97,7 @@ void CorresBuilder::initCloudPair()
         for (uint32_t j = i + 2; j < size; ++j)
         {
             CloudTransform trans = m_initCloudTransform[i].inverse() * m_initCloudTransform[j];
-            if (volumeOverlapRatio(trans) > 0.3f) {
+            if (volumeOverlapRatio(trans) > 0.3f && centroidDistance(i, j) < 0.8) {
                 m_cloudPairs.push_back(CloudPair(i, j, trans));
             }
         }
@@ -238,14 +238,16 @@ void CorresBuilder::alignEachPair(CloudPair &pair)
 
     PCL_INFO("Align pair <%d, %d>\n", pair.corresIdx.first, pair.corresIdx.second);
 
-    CloudTypePtr p0 = downsampledCloudWithNumberOfPoints(m_pointClouds[pair.corresIdx.first], 200000);
-    CloudTypePtr p1 = downsampledCloudWithNumberOfPoints(m_pointClouds[pair.corresIdx.second], 200000);
+    int sample_count = m_params.randomSamplingLimitUsedToAlignment;
+    CloudTypePtr p0 = downsampledCloudWithNumberOfPoints(m_pointClouds[pair.corresIdx.first], sample_count);
+    CloudTypePtr p1 = downsampledCloudWithNumberOfPoints(m_pointClouds[pair.corresIdx.second], sample_count);
 
     CloudTypePtr transformed(new CloudType);
     pcl::transformPointCloudWithNormals(*p1, *transformed, pair.relativeTrans);
 
     kdtree.setInputCloud(p0);
     size_t count = 0;
+#pragma unroll 8
     for (size_t n = 0; n < transformed->size(); ++n) {
         if (kdtree.nearestKSearch(transformed->points[n], K, pointIndices, pointDistances) > 0) {
             if (pointDistances[0] < m_params.acceptableICPPointDistThres * m_params.acceptableICPPointDistThres) {
@@ -258,8 +260,9 @@ void CorresBuilder::alignEachPair(CloudPair &pair)
     double r2 = (double)count / (double)p1->size();
     PCL_INFO("    <%d, %d> : %d inliers with ratio %.2f(%d) and %.2f(%d) ...\n", pair.corresIdx.first, pair.corresIdx.second, count, r1, p0->size(), r2, p1->size());
 
-    bool accept = count >= m_params.acceptableCorresPointNum ||
-        (r1 > m_params.acceptableCorresPointRatio && r2 > m_params.acceptableCorresPointRatio);
+    const int min_count = m_params.acceptableCorresPointNum;
+    const float min_ratio = m_params.acceptableCorresPointRatio;
+    bool accept = count >= min_count || (r1 > min_ratio && r2 > min_ratio);
     if (!accept) {
         PCL_INFO("reject\n");
         pair.corresIdx = std::make_pair(-1, -1);
@@ -273,8 +276,8 @@ void CorresBuilder::alignEachPair(CloudPair &pair)
     typedef pcl::registration::TransformationEstimationPointToPlaneLLS<PointType, PointType> P2PlaneEstimation;
     boost::shared_ptr<P2PlaneEstimation> point_to_plane(new P2PlaneEstimation);
 
-    icp.setInputCloud(downsampledCloudWithNumberOfPoints(p1, 10000));
-    icp.setInputTarget(downsampledCloudWithNumberOfPoints(p0, 10000));
+    icp.setInputCloud(downsampledCloudWithNumberOfPoints(p1, 20000));
+    icp.setInputTarget(downsampledCloudWithNumberOfPoints(p0, 20000));
     icp.setMaxCorrespondenceDistance(m_params.acceptableICPPointDistThres);
     icp.setMaximumIterations(m_params.maxICPIteration);
     icp.setTransformationEpsilon(1e-6);
@@ -312,4 +315,13 @@ void CorresBuilder::alignEachPair(CloudPair &pair)
         PCL_WARN("\tCan't align pair <%d, %d>\n", pair.corresIdx.first, pair.corresIdx.second);
         pair.corresIdx = std::make_pair(-1, -1);
     }
+}
+
+float CorresBuilder::centroidDistance(int cloud0, int cloud1)
+{
+    Eigen::Vector4f c0, c1;
+    pcl::compute3DCentroid(*m_pointClouds[cloud0], c0);
+    pcl::compute3DCentroid(*m_pointClouds[cloud1], c1);
+
+    return (c0 - c1).norm();
 }

@@ -13,13 +13,14 @@ public:
     BasicParameter()
         : acceptableICPPointDistThres(0.05)
         , corresPointDistThres(0.015)
-        , corresPointNormThres(30.f)
+        , corresPointNormThres(20.f)
         , saveCorresPointIndices(true)
         , corresPointSavePath("./corres")
         , cloudPairNeedAlignment(true)
-        , acceptableCorresPointNum(40000)
+        , acceptableCorresPointNum(10000)
         , acceptableCorresPointRatio(0.3)
-        , translationThres(0.24)
+        , translationThres(0.3)
+        , randomSamplingLimitUsedToAlignment(50000)
         , rotationThres(15)
         , maxICPIteration(50)
     {}
@@ -37,6 +38,7 @@ public:
     bool saveCorresPointIndices;
     std::string corresPointSavePath;
     int acceptableCorresPointNum;
+    int randomSamplingLimitUsedToAlignment;
     int maxICPIteration;
     float acceptableCorresPointRatio;
     bool cloudPairNeedAlignment;
