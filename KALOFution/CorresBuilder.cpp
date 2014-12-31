@@ -97,7 +97,7 @@ void CorresBuilder::initCloudPair()
         for (uint32_t j = i + 2; j < size; ++j)
         {
             CloudTransform trans = m_initCloudTransform[i].inverse() * m_initCloudTransform[j];
-            if (volumeOverlapRatio(trans) > 0.3f && centroidDistance(i, j) < 0.8) {
+            if (volumeOverlapRatio(trans) > 0.3f && centroidDistance(i, j) < 1.) {
                 m_cloudPairs.push_back(CloudPair(i, j, trans));
             }
         }

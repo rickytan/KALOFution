@@ -68,7 +68,7 @@ CloudTypePtr MapDumper::mapToCloud(std::vector<float> &vmap, std::vector<float> 
             PointType point;
             point.normal_x = nmap[640 * (0 * 480 + row) + col];
             if (isnan(point.normal_x)) {
-                ++invalid_norm_count;
+                ++nan_count;
                 continue;
             }
             point.normal_y = nmap[640 * (1 * 480 + row) + col];
@@ -86,7 +86,7 @@ CloudTypePtr MapDumper::mapToCloud(std::vector<float> &vmap, std::vector<float> 
                 ++invalid_depth_count;
                 continue;
             }
-            float thre_cos = cosf(m_normAngleThres);
+            float thre_cos = cosf(m_normAngleThres * M_PI / 180);
             if (fabsf(point.normal_z) < thre_cos) {
                 ++invalid_norm_count;
                 continue;
@@ -189,5 +189,6 @@ CloudTypePtr MapDumper::filterByRemoveOutlier(CloudTypePtr &incloud)
     // set threshold for minimum required neighbors neighbors
     radius_outlier_removal.setMinNeighborsInRadius(120);
     // do filtering
-    radius_outlier_removal.filter(*cleaned);    return cleaned;
+    radius_outlier_removal.filter(*cleaned);
+    return cleaned;
 }
