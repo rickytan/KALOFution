@@ -70,6 +70,7 @@ public:
         }
         if (size < 0) {
             PCL_ERROR("Fail to load file : %s\n", filename.c_str());
+            cloud.reset();
         }
         return cloud;
     }

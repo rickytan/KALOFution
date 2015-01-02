@@ -22,6 +22,7 @@ public:
         , translationThres(0.3)
         , randomSamplingLimitUsedToAlignment(50000)
         , rotationThres(15)
+        , useBetterCorrespondence(false)
         , maxICPIteration(50)
     {}
     virtual ~BasicParameter() {}
@@ -42,6 +43,7 @@ public:
     int maxICPIteration;
     float acceptableCorresPointRatio;
     bool cloudPairNeedAlignment;
+    bool useBetterCorrespondence;
 };
 
 #endif  // _BASICPARAMETER_H_

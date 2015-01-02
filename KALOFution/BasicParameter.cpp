@@ -24,6 +24,7 @@ void BasicParameter::parse(int argc, char *argv[])
     parse_argument(argc, argv, "--align-translation-thres", translationThres);
     parse_argument(argc, argv, "--align-rotation-thres", rotationThres);
     parse_argument(argc, argv, "--need-align", cloudPairNeedAlignment);
+    parse_argument(argc, argv, "--better-corres", useBetterCorrespondence);
 
     if (boost::filesystem::exists(corresPointSavePath) && !boost::filesystem::is_directory(corresPointSavePath)) {
         boost::filesystem::remove(corresPointSavePath);

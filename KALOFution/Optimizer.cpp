@@ -6,6 +6,7 @@
 #include <Eigen/Geometry>
 
 #include <pcl/common/transforms.h>
+#include <pcl/common/time.h>
 #include <pcl/io/io.h>
 #include <pcl/io/ply_io.h>
 #include <pcl/io/pcd_io.h>
@@ -74,6 +75,7 @@ void Optimizer::optimizeRigid()
     for (int iter_count = 0; iter_count < m_params.maxIteration; ++iter_count)
     {
         PCL_INFO("Iteration : %d\n", iter_count);
+        pcl::ScopeTime time("optimizing");
 
         ATb.setZero();
         ATA.setZero();
@@ -108,11 +110,13 @@ void Optimizer::optimizeRigid()
 
         Vec X;
         if (m_params.useCholmod) {
+            pcl::ScopeTime mat_solve("\t\tMatrix solve");
             Eigen::CholmodSupernodalLLT<Mat> solver;
             solver.compute(ATA);
             X = solver.solve(ATb);
         }
         else {
+            pcl::ScopeTime mat_solve("\t\tMatrix solve");
             Eigen::SimplicialCholesky<Mat> solver(ATA);
             X = solver.solve(ATb);
         }

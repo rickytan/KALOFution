@@ -35,6 +35,11 @@ typedef pcl::FPFHSignature33                FeatureType;
 typedef pcl::PointCloud<FeatureType>        FeatureCloudType;
 typedef pcl::PointCloud<FeatureType>::Ptr   FeatureCloudTypePtr;
 
+typedef pcl::PointWithScale                     ScalePointType;
+typedef pcl::PointCloud<ScalePointType>         ScaleCloudType;
+typedef pcl::PointCloud<ScalePointType>::Ptr    ScaleCloudTypePtr;
+
+
 using namespace std;
 
 CloudTypePtr loadCloud(const string &filename) {
@@ -95,8 +100,21 @@ CloudTypePtr downsampledCloudWithNumberOfPoints(CloudTypePtr cloud, int points)
     return downsampledCloud;
 }
 
+void detect_keypoints(CloudTypePtr cloud, float min_scale, int nr_octaves, int nr_scale_per_octave, float min_contrast, ScaleCloudTypePtr &out)
+{
+    pcl::SIFTKeypoint<PointType, ScalePointType> sift;
+    pcl::search::KdTree<PointType>::Ptr tree(new pcl::search::KdTree<PointType>);
+    sift.setSearchMethod(tree);
+    sift.setScales(min_scale, nr_octaves, nr_scale_per_octave);
+    sift.setMinimumContrast(min_contrast);
+    sift.setInputCloud(cloud);
+    sift.setSearchSurface(cloud);
+    sift.setKSearch(150);
+    sift.compute(*out);
+}
+
 int main(int argc, char *argv[]) {
-    if (argc != 3) {
+    if (argc < 3) {
         printf("Usage: %s <target_cloud> <input_cloud>\n", argv[0]);
         return 0;
     }
@@ -109,9 +127,29 @@ int main(int argc, char *argv[]) {
 
     CloudTypePtr transformed(new CloudType);
     CloudTypePtr aligned_cloud(new CloudType);
+    ScaleCloudTypePtr out(new ScaleCloudType);
+
+    float p1 = 0.01f;
+    int p2 = 3, p3 = 1;
+    float p4 = 0.f;
+    sscanf(argv[3], "%f", &p1);
+    sscanf(argv[4], "%d", &p2);
+    sscanf(argv[5], "%d", &p3);
+    sscanf(argv[6], "%f", &p4);
+
+    detect_keypoints(cloud0, p1, p2, p3, p4, out);
+    if (transformed->size() == 0) {
+        PCL_ERROR("No keypoints!");
+    }
+    else {
+        saveCloud(transformed, outfile);
+    }
+    return 0;
 
     FeatureCloudType feature_cloud0;
     FeatureCloudType feature_cloud1;
+
+    
 
     pcl::search::KdTree<PointType>::Ptr tree(new pcl::search::KdTree<PointType>);
     pcl::FPFHEstimation<PointType, PointType, FeatureType> fpfh;

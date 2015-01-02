@@ -5,6 +5,7 @@
 #include <fstream>
 #include <cstdio>
 #include <cstdlib>
+#include <algorithm>
 
 #include "CorresBuilder.h"
 #include "DataProvider.h"
@@ -97,7 +98,7 @@ void CorresBuilder::initCloudPair()
         for (uint32_t j = i + 2; j < size; ++j)
         {
             CloudTransform trans = m_initCloudTransform[i].inverse() * m_initCloudTransform[j];
-            if (volumeOverlapRatio(trans) > 0.3f && centroidDistance(i, j) < 1.) {
+            if (volumeOverlapRatio(trans) > 0.3f && centroidDistance(i, j) < 1.5) {
                 m_cloudPairs.push_back(CloudPair(i, j, trans));
             }
         }
@@ -172,13 +173,31 @@ void CorresBuilder::findCorres(CloudPair& pair)
     kdtree.setInputCloud(p0);
     const float normThres = cosf(m_params.corresPointNormThres * M_PI / 180);
     for (size_t n = 0; n < transformed->size(); ++n) {
-        if (kdtree.nearestKSearch(transformed->points[n], K, pointIndices, pointDistances) > 0) {
-            PointType point0 = p0->points[pointIndices[0]];
-            PointType point1 = transformed->points[n];
-            float norm = Eigen::Map<Eigen::Vector3f>(point0.normal).dot(Eigen::Map<Eigen::Vector3f>(point1.normal));
-            if (pointDistances[0] < m_params.corresPointDistThres * m_params.corresPointDistThres &&
-                fabsf(norm) > normThres) {
-                pointCorrespondence.push_back(PointPair(pointIndices[0], n));
+        if (!m_params.useBetterCorrespondence) {
+            if (kdtree.nearestKSearch(transformed->points[n], K, pointIndices, pointDistances) > 0) {
+                PointType point0 = p0->points[pointIndices[0]];
+                PointType point1 = transformed->points[n];
+                float norm = Eigen::Map<Eigen::Vector3f>(point0.normal).dot(Eigen::Map<Eigen::Vector3f>(point1.normal));
+                if (pointDistances[0] < m_params.corresPointDistThres * m_params.corresPointDistThres &&
+                    fabsf(norm) > normThres) {
+                    pointCorrespondence.push_back(PointPair(pointIndices[0], n));
+                }
+            }
+        }
+        else {
+            const float lamda = 10.f;
+            if (kdtree.radiusSearch(transformed->points[n], m_params.corresPointDistThres, pointIndices, pointDistances) > 0) {
+                for (int i = 0; i < pointDistances.size(); ++i)
+                {
+                    Eigen::Vector3f Np = transformed->points[n].getNormalVector3fMap();
+                    Eigen::Vector3f Nq = p0->points[pointIndices[i]].getNormalVector3fMap();
+                    pointDistances[i] = sqrtf(pointDistances[i]) / m_params.corresPointDistThres + lamda / (1.f + Np.dot(Nq));
+                }
+                int index = std::min_element(pointDistances.begin(), pointDistances.end()) - pointDistances.begin();
+                float norm = transformed->points[n].getNormalVector3fMap().dot(p0->points[pointIndices[index]].getNormalVector3fMap());
+                if ( norm > normThres) {
+                    pointCorrespondence.push_back(PointPair(pointIndices[index], n));
+                }
             }
         }
     }
@@ -280,6 +299,8 @@ void CorresBuilder::alignEachPair(CloudPair &pair)
     icp.setInputTarget(downsampledCloudWithNumberOfPoints(p0, 20000));
     icp.setMaxCorrespondenceDistance(m_params.acceptableICPPointDistThres);
     icp.setMaximumIterations(m_params.maxICPIteration);
+    icp.setRANSACOutlierRejectionThreshold(0.05);
+    icp.setRANSACIterations(20);
     icp.setTransformationEpsilon(1e-6);
     icp.setTransformationEstimation(point_to_plane);
     icp.align(*transformed, pair.relativeTrans.matrix());
