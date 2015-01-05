@@ -32,6 +32,7 @@ private:
     void initCloudAndTransform(DataProvider& provider);
     void initCloudPair();
     float volumeOverlapRatio(const Eigen::Affine3f& trans);
+    float centroidDistance(int cloud0, int cloud1);
     void findCorresPoints();
     void findCorres(CloudPair& pair);
     void alignPairs();

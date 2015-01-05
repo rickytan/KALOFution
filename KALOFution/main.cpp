@@ -7,6 +7,7 @@
 #include "MapDumper.h"
 #include "OptimizerParameter.h"
 #include "Optimizer.h"
+#include "MeshGenerator.h"
 
 #include <pcl/console/parse.h>
 #include <pcl/common/transforms.h>
@@ -126,16 +127,19 @@ int main(int argc, char *argv[])
         std::string data_dir = "./datadump";
         std::string data_format = "pcd";
         std::string pos_file = "";
+        bool filter = false;
         float min_clip = 0.3;
         float max_clip = 2.4;
         parse_argument(argc, argv, "--dump-dir", dump_dir);
         parse_argument(argc, argv, "--step", step);
         parse_argument(argc, argv, "--data-dir", data_dir);
         parse_argument(argc, argv, "--format", data_format);
+        filter = find_switch(argc, argv, "--filter");
 
         MapDumper dumper(data_dir);
         dumper.setStep(step);
         dumper.setDumpFormat(data_format);
+        dumper.setShouldFilter(filter);
         
         if (parse_argument(argc, argv, "--pos-file", pos_file) >= 0) {
             dumper.setCameraPosFile(pos_file);
@@ -147,6 +151,42 @@ int main(int argc, char *argv[])
             dumper.setMaxClipDepth(max_clip);
         }
         dumper.dumpTo(dump_dir);
+    }
+    else if (sub_prog == "generatemesh") {
+        string cloud_dir;
+        string cloud_file;
+        string file_type("pcd");
+        string out_file("out.ply");
+        parse_argument(argc, argv, "--cloud-dir", cloud_dir);
+        parse_argument(argc, argv, "--cloud-file", cloud_file);
+        parse_argument(argc, argv, "--ext", file_type);
+        parse_argument(argc, argv, "--save-to", out_file);
+
+        boost::filesystem::path path(out_file);
+        if (path.extension() != ".ply") {
+            PCL_ERROR("Unsupported file type : %s\n", path.extension());
+            return 0;
+        }
+
+        MeshGenerator generator;
+        if (!cloud_dir.empty()) {
+            generator.addPointCloudsFromDirectory(cloud_dir, file_type);
+        }
+        else if (!cloud_file.empty()) {
+            boost::filesystem::path path(cloud_file);
+            if (path.extension() == ".ply") {
+                generator.addPointCloudFromPLY(cloud_file);
+            }
+            else if (path.extension() == ".pcd") {
+                generator.addPointCloudFromPCD(cloud_file);
+            }
+            else {
+                PCL_ERROR("Unsupported file format : %s\n", cloud_file.c_str());
+                return 0;
+            }
+        }
+        pcl::PolygonMeshPtr mesh = generator.generateMesh();
+        pcl::io::savePLYFile(out_file, *mesh);
     }
     else {
         PCL_ERROR("Unknown command : %s\n", sub_prog.c_str());

@@ -6,6 +6,7 @@
 #include <Eigen/Geometry>
 
 #include <pcl/common/transforms.h>
+#include <pcl/common/time.h>
 #include <pcl/io/io.h>
 #include <pcl/io/ply_io.h>
 #include <pcl/io/pcd_io.h>
@@ -27,15 +28,6 @@ public:
         fillBlock(col, row, vec1 * vec0.transpose());
         fillBlock(col, col, vec1 * vec1.transpose());
     }
-
-private:
-    void fillBlock(int block_r, int block_c, const Eigen::Matrix<double, 6, 6> &mat) {
-        for (int i = 0; i < 6; ++i) {
-            for (int j = 0; j < 6; ++j) {
-                add(block_r * 6 + i, block_c * 6 + j, mat(i, j));
-            }
-        }
-    }
     void add(int r, int c, double v) {
         if (!m_indexMap.count(r)) {
             m_indexMap[r] = std::map<int, size_t>();
@@ -48,6 +40,15 @@ private:
             m_tripletToFill[m_indexMap[r][c]].m_value += v;
         }
     }
+private:
+    void fillBlock(int block_r, int block_c, const Eigen::Matrix<double, 6, 6> &mat) {
+        for (int i = 0; i < 6; ++i) {
+            for (int j = 0; j < 6; ++j) {
+                add(block_r * 6 + i, block_c * 6 + j, mat(i, j));
+            }
+        }
+    }
+
 private:
     TriContainer &m_tripletToFill;
     std::map<int, std::map<int, size_t> > m_indexMap;
@@ -74,6 +75,7 @@ void Optimizer::optimizeRigid()
     for (int iter_count = 0; iter_count < m_params.maxIteration; ++iter_count)
     {
         PCL_INFO("Iteration : %d\n", iter_count);
+        pcl::ScopeTime time("optimizing");
 
         ATb.setZero();
         ATA.setZero();
@@ -106,18 +108,23 @@ void Optimizer::optimizeRigid()
         std::ofstream("debug_matrix.txt", std::ios::out) << ATA;
         std::ofstream("debug_b.txt", std::ios::out) << ATb.format(format);
 
-        Eigen::SimplicialCholesky<Mat> solver(ATA);
-        
-        //Eigen::CholmodSupernodalLLT<Mat> solver;
-        //solver.analyzePattern(ATA);
-        //solver.factorize(ATA);
-        //solver.compute(ATA);
-        
-        Vec X = solver.solve(ATb);
+        Vec X;
+        if (m_params.useCholmod) {
+            pcl::ScopeTime mat_solve("\t\tMatrix solve");
+            Eigen::CholmodSupernodalLLT<Mat> solver;
+            solver.compute(ATA);
+            X = solver.solve(ATb);
+        }
+        else {
+            pcl::ScopeTime mat_solve("\t\tMatrix solve");
+            Eigen::SimplicialCholesky<Mat> solver(ATA);
+            X = solver.solve(ATb);
+        }
 
         std::ofstream("debug_result.txt", std::ios::out) << X.format(format);
         //std::cout << "Result :\n\n" << X << std::endl << std::endl;
 
+#pragma unroll 8
         for (size_t i = 0; i < num_clouds; ++i) {
             CloudTransform trans;
             float beta = X.block<6, 1>(i * 6, 0)[0];
@@ -159,12 +166,16 @@ void Optimizer::eachCloudPair(CloudPair &pair)
     TriContainer mat_elem;
     SparseMatFiller filler(mat_elem);
 
+    for (int i = 0; i < 6; ++i) {
+        filler.add(i, i, 1.0);
+    }
+
     Vec atb(matrix_size);
     Mat ata(matrix_size, matrix_size);
     atb.setZero(), ata.setZero();
 
     double score = 0.0;
-
+#pragma unroll 8
     for (size_t point_count = 0; point_count < pair.corresPointIdx.size(); ++point_count) {
         int point_p = pair.corresPointIdx[point_count].first;
         int point_q = pair.corresPointIdx[point_count].second;

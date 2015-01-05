@@ -33,9 +33,10 @@ public:
     void setMinClipDepth(float depth) { m_minDepth = depth; }
     void setDumpFormat(const string &fmt) { m_dumpFormat = fmt; }
     void setCameraPosFile(const string &file) { m_cameraPosFile = file; }
-
+    void setShouldFilter(const bool filter) { m_shouldFilter = filter; }
 private:
     CloudTypePtr mapToCloud(std::vector<float> &vmap, std::vector<float> &nmap);
+    CloudTypePtr filterByRemoveOutlier(CloudTypePtr &incloud);
     void forEachMap(int map_file_index);
     void initPoses();
 private:
@@ -47,7 +48,7 @@ private:
     std::vector<Eigen::Affine3f> m_cameraPoses;
     float m_minDepth, m_maxDepth;
     float m_normAngleThres;     // the angle between norm and view direction
-
+    bool m_shouldFilter;
     boost::mutex m_outputMutex;
 };
 

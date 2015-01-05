@@ -26,7 +26,7 @@ namespace Eigen {
 
 using boost::math::isnan;
 
-typedef pcl::PointXYZINormal PointType;
+typedef pcl::PointNormal PointType;
 typedef pcl::PointCloud<PointType> CloudType;
 typedef pcl::PointCloud<PointType>::Ptr CloudTypePtr;
 typedef std::pair<int, int> PointPair;

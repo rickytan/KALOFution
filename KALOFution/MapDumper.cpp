@@ -9,6 +9,7 @@
 #include <pcl/common/transforms.h>
 #include <pcl/io/ply_io.h>
 #include <pcl/io/pcd_io.h>
+#include <pcl/filters/radius_outlier_removal.h>
 
 #include <boost/thread.hpp>
 #include <boost/filesystem.hpp>
@@ -67,7 +68,7 @@ CloudTypePtr MapDumper::mapToCloud(std::vector<float> &vmap, std::vector<float> 
             PointType point;
             point.normal_x = nmap[640 * (0 * 480 + row) + col];
             if (isnan(point.normal_x)) {
-                ++invalid_norm_count;
+                ++nan_count;
                 continue;
             }
             point.normal_y = nmap[640 * (1 * 480 + row) + col];
@@ -85,7 +86,7 @@ CloudTypePtr MapDumper::mapToCloud(std::vector<float> &vmap, std::vector<float> 
                 ++invalid_depth_count;
                 continue;
             }
-            float thre_cos = cosf(m_normAngleThres);
+            float thre_cos = cosf(m_normAngleThres * M_PI / 180);
             if (fabsf(point.normal_z) < thre_cos) {
                 ++invalid_norm_count;
                 continue;
@@ -136,6 +137,9 @@ void MapDumper::forEachMap(int index)
     norm_file.close();
 
     CloudTypePtr cloud = mapToCloud(point_data, norm_data);
+    if (m_shouldFilter) {
+        cloud = filterByRemoveOutlier(cloud);
+    }
     CloudTypePtr transformed = cloud;
     if (m_cameraPoses.size() > index) {
         transformed.reset(new CloudType);
@@ -170,4 +174,21 @@ void MapDumper::initPoses()
         m_cameraPoses.push_back(affine);
     }
     fclose(fp);
+}
+
+CloudTypePtr MapDumper::filterByRemoveOutlier(CloudTypePtr &incloud)
+{
+    // point cloud instance for the result
+    CloudTypePtr cleaned(new CloudType);
+    // create the radius outlier removal filter
+    pcl::RadiusOutlierRemoval<PointType> radius_outlier_removal;
+    // set input cloud
+    radius_outlier_removal.setInputCloud(incloud);
+    // set radius for neighbor search
+    radius_outlier_removal.setRadiusSearch(0.05);
+    // set threshold for minimum required neighbors neighbors
+    radius_outlier_removal.setMinNeighborsInRadius(120);
+    // do filtering
+    radius_outlier_removal.filter(*cleaned);
+    return cleaned;
 }

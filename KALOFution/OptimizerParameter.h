@@ -14,6 +14,7 @@ public:
     OptimizerParameter()
         : maxIteration(8)
         , saveDirectory("./optimized")
+        , useCholmod(false)
     {}
     virtual ~OptimizerParameter() {}
 
@@ -22,6 +23,7 @@ public:
 
     int maxIteration;
     string saveDirectory;
+    bool useCholmod;
 };
 
 #endif  // _OPTIMIZERPARAMETER_H_
