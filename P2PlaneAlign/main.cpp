@@ -182,7 +182,13 @@ int main(int argc, char *argv[]) {
     if (sac.hasConverged()) {
         PCL_INFO("\tSAC fitness score is %.6f\n", sac.getFitnessScore());
         PCL_INFO("\tTransform matrix :\n");
-        cout << sac.getFinalTransformation() << endl;        saveCloud(aligned_cloud, outfile);    }    else {        PCL_ERROR("Can't align cloud pair!\n");    }    return 0;
+        cout << sac.getFinalTransformation() << endl;
+        saveCloud(aligned_cloud, outfile);
+    }
+    else {
+        PCL_ERROR("Can't align cloud pair!\n");
+    }
+    return 0;
 
     pcl::IterativeClosestPoint<PointType, PointType> icp;
     typedef pcl::registration::TransformationEstimationPointToPlaneLLS<PointType, PointType> P2PlaneEstimation;

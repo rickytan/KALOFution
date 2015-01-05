@@ -186,14 +186,14 @@ void CorresBuilder::findCorres(CloudPair& pair)
         }
         else {
             const float lamda = 10.f;
-            if (kdtree.radiusSearch(transformed->points[n], m_params.corresPointDistThres, pointIndices, pointDistances) > 0) {
+            if (kdtree.radiusSearch(transformed->points[n], m_params.corresPointDistThres, pointIndices, pointDistances, 50) > 0) {
                 for (int i = 0; i < pointDistances.size(); ++i)
                 {
                     Eigen::Vector3f Np = transformed->points[n].getNormalVector3fMap();
                     Eigen::Vector3f Nq = p0->points[pointIndices[i]].getNormalVector3fMap();
-                    pointDistances[i] = sqrtf(pointDistances[i]) / m_params.corresPointDistThres + lamda / (1.f + Np.dot(Nq));
+                    pointDistances[i] = 1.f - sqrtf(pointDistances[i]) / m_params.corresPointDistThres + lamda * Np.dot(Nq);
                 }
-                int index = std::min_element(pointDistances.begin(), pointDistances.end()) - pointDistances.begin();
+                int index = std::max_element(pointDistances.begin(), pointDistances.end()) - pointDistances.begin();
                 float norm = transformed->points[n].getNormalVector3fMap().dot(p0->points[pointIndices[index]].getNormalVector3fMap());
                 if ( norm > normThres) {
                     pointCorrespondence.push_back(PointPair(pointIndices[index], n));

@@ -20,7 +20,7 @@ public:
     MapDumper(const string &map_dir)
         : m_mapDir(map_dir)
         , m_dumpStep(1)
-        , m_minDepth(0.3)
+        , m_minDepth(0.8)
         , m_maxDepth(2.4)
         , m_dumpFormat("pcd")
         , m_normAngleThres(80)

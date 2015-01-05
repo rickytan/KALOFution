@@ -187,7 +187,7 @@ CloudTypePtr MapDumper::filterByRemoveOutlier(CloudTypePtr &incloud)
     // set radius for neighbor search
     radius_outlier_removal.setRadiusSearch(0.05);
     // set threshold for minimum required neighbors neighbors
-    radius_outlier_removal.setMinNeighborsInRadius(120);
+    radius_outlier_removal.setMinNeighborsInRadius(200);
     // do filtering
     radius_outlier_removal.filter(*cleaned);
     return cleaned;
