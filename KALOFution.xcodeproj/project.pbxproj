@@ -10,13 +10,14 @@
 		9C5AF9AB1A3C9DE100F50736 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9C5AF9AA1A3C9DE100F50736 /* main.cpp */; };
 		9C5AF9B61A3C9E3600F50736 /* CorresBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9C5AF9B11A3C9E3600F50736 /* CorresBuilder.cpp */; };
 		9C5AF9B71A3C9E3600F50736 /* DataProvider.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9C5AF9B31A3C9E3600F50736 /* DataProvider.cpp */; };
-		9C5AF9B91A3D346D00F50736 /* libpcl_common.1.6.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C5AF9B81A3D346D00F50736 /* libpcl_common.1.6.0.dylib */; };
-		9C5AF9BE1A3D34C200F50736 /* libpcl_io_ply.1.6.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C5AF9BA1A3D34C200F50736 /* libpcl_io_ply.1.6.0.dylib */; };
-		9C5AF9BF1A3D34C200F50736 /* libpcl_io.1.6.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C5AF9BB1A3D34C200F50736 /* libpcl_io.1.6.0.dylib */; };
-		9C5AF9C01A3D34C200F50736 /* libpcl_kdtree.1.6.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C5AF9BC1A3D34C200F50736 /* libpcl_kdtree.1.6.0.dylib */; };
-		9C5AF9C11A3D34C200F50736 /* libpcl_registration.1.6.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C5AF9BD1A3D34C200F50736 /* libpcl_registration.1.6.0.dylib */; };
-		9CA77EEB1A3E8EDE00F62EB1 /* libflann_s.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CA77EEA1A3E8EDE00F62EB1 /* libflann_s.a */; };
-		9CA77EED1A3E8F0B00F62EB1 /* libflann.1.8.4.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 9CA77EEC1A3E8F0B00F62EB1 /* libflann.1.8.4.dylib */; };
+		9CC794B61A46C04D0027315B /* BasicParameter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9CC794A61A46C04D0027315B /* BasicParameter.cpp */; };
+		9CC794B71A46C04D0027315B /* Depth2PLY.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9CC794A81A46C04D0027315B /* Depth2PLY.cpp */; };
+		9CC794B81A46C04D0027315B /* MapDumper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9CC794AA1A46C04D0027315B /* MapDumper.cpp */; };
+		9CC794B91A46C04D0027315B /* MP4Dumper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9CC794AC1A46C04D0027315B /* MP4Dumper.cpp */; };
+		9CC794BA1A46C04D0027315B /* ONIDumper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9CC794AE1A46C04D0027315B /* ONIDumper.cpp */; };
+		9CC794BB1A46C04D0027315B /* Optimizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9CC794B01A46C04D0027315B /* Optimizer.cpp */; };
+		9CC794BC1A46C04D0027315B /* OptimizerParameter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9CC794B21A46C04D0027315B /* OptimizerParameter.cpp */; };
+		9CC794BD1A46C04D0027315B /* Parameter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9CC794B41A46C04D0027315B /* Parameter.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -39,13 +40,22 @@
 		9C5AF9B31A3C9E3600F50736 /* DataProvider.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DataProvider.cpp; sourceTree = "<group>"; };
 		9C5AF9B41A3C9E3600F50736 /* DataProvider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataProvider.h; sourceTree = "<group>"; };
 		9C5AF9B51A3C9E3600F50736 /* define.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = define.h; sourceTree = "<group>"; };
-		9C5AF9B81A3D346D00F50736 /* libpcl_common.1.6.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpcl_common.1.6.0.dylib; path = ../../../../usr/local/lib/libpcl_common.1.6.0.dylib; sourceTree = "<group>"; };
-		9C5AF9BA1A3D34C200F50736 /* libpcl_io_ply.1.6.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpcl_io_ply.1.6.0.dylib; path = ../../../../usr/local/lib/libpcl_io_ply.1.6.0.dylib; sourceTree = "<group>"; };
-		9C5AF9BB1A3D34C200F50736 /* libpcl_io.1.6.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpcl_io.1.6.0.dylib; path = ../../../../usr/local/lib/libpcl_io.1.6.0.dylib; sourceTree = "<group>"; };
-		9C5AF9BC1A3D34C200F50736 /* libpcl_kdtree.1.6.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpcl_kdtree.1.6.0.dylib; path = ../../../../usr/local/lib/libpcl_kdtree.1.6.0.dylib; sourceTree = "<group>"; };
-		9C5AF9BD1A3D34C200F50736 /* libpcl_registration.1.6.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libpcl_registration.1.6.0.dylib; path = ../../../../usr/local/lib/libpcl_registration.1.6.0.dylib; sourceTree = "<group>"; };
-		9CA77EEA1A3E8EDE00F62EB1 /* libflann_s.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libflann_s.a; path = ../../../../usr/local/Cellar/flann/1.8.4/lib/libflann_s.a; sourceTree = "<group>"; };
-		9CA77EEC1A3E8F0B00F62EB1 /* libflann.1.8.4.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libflann.1.8.4.dylib; path = ../../../../usr/local/Cellar/flann/1.8.4/lib/libflann.1.8.4.dylib; sourceTree = "<group>"; };
+		9CC794A61A46C04D0027315B /* BasicParameter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BasicParameter.cpp; sourceTree = "<group>"; };
+		9CC794A71A46C04D0027315B /* BasicParameter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BasicParameter.h; sourceTree = "<group>"; };
+		9CC794A81A46C04D0027315B /* Depth2PLY.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Depth2PLY.cpp; sourceTree = "<group>"; };
+		9CC794A91A46C04D0027315B /* Depth2PLY.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Depth2PLY.h; sourceTree = "<group>"; };
+		9CC794AA1A46C04D0027315B /* MapDumper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MapDumper.cpp; sourceTree = "<group>"; };
+		9CC794AB1A46C04D0027315B /* MapDumper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapDumper.h; sourceTree = "<group>"; };
+		9CC794AC1A46C04D0027315B /* MP4Dumper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MP4Dumper.cpp; sourceTree = "<group>"; };
+		9CC794AD1A46C04D0027315B /* MP4Dumper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MP4Dumper.h; sourceTree = "<group>"; };
+		9CC794AE1A46C04D0027315B /* ONIDumper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ONIDumper.cpp; sourceTree = "<group>"; };
+		9CC794AF1A46C04D0027315B /* ONIDumper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ONIDumper.h; sourceTree = "<group>"; };
+		9CC794B01A46C04D0027315B /* Optimizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Optimizer.cpp; sourceTree = "<group>"; };
+		9CC794B11A46C04D0027315B /* Optimizer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Optimizer.h; sourceTree = "<group>"; };
+		9CC794B21A46C04D0027315B /* OptimizerParameter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OptimizerParameter.cpp; sourceTree = "<group>"; };
+		9CC794B31A46C04D0027315B /* OptimizerParameter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OptimizerParameter.h; sourceTree = "<group>"; };
+		9CC794B41A46C04D0027315B /* Parameter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Parameter.cpp; sourceTree = "<group>"; };
+		9CC794B51A46C04D0027315B /* Parameter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Parameter.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,13 +63,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9CA77EED1A3E8F0B00F62EB1 /* libflann.1.8.4.dylib in Frameworks */,
-				9CA77EEB1A3E8EDE00F62EB1 /* libflann_s.a in Frameworks */,
-				9C5AF9BE1A3D34C200F50736 /* libpcl_io_ply.1.6.0.dylib in Frameworks */,
-				9C5AF9BF1A3D34C200F50736 /* libpcl_io.1.6.0.dylib in Frameworks */,
-				9C5AF9C01A3D34C200F50736 /* libpcl_kdtree.1.6.0.dylib in Frameworks */,
-				9C5AF9C11A3D34C200F50736 /* libpcl_registration.1.6.0.dylib in Frameworks */,
-				9C5AF9B91A3D346D00F50736 /* libpcl_common.1.6.0.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -69,13 +72,6 @@
 		9C5AF99E1A3C9DE100F50736 = {
 			isa = PBXGroup;
 			children = (
-				9CA77EEC1A3E8F0B00F62EB1 /* libflann.1.8.4.dylib */,
-				9CA77EEA1A3E8EDE00F62EB1 /* libflann_s.a */,
-				9C5AF9BA1A3D34C200F50736 /* libpcl_io_ply.1.6.0.dylib */,
-				9C5AF9BB1A3D34C200F50736 /* libpcl_io.1.6.0.dylib */,
-				9C5AF9BC1A3D34C200F50736 /* libpcl_kdtree.1.6.0.dylib */,
-				9C5AF9BD1A3D34C200F50736 /* libpcl_registration.1.6.0.dylib */,
-				9C5AF9B81A3D346D00F50736 /* libpcl_common.1.6.0.dylib */,
 				9C5AF9A91A3C9DE100F50736 /* KALOFution */,
 				9C5AF9A81A3C9DE100F50736 /* Products */,
 			);
@@ -92,12 +88,28 @@
 		9C5AF9A91A3C9DE100F50736 /* KALOFution */ = {
 			isa = PBXGroup;
 			children = (
+				9CC794A61A46C04D0027315B /* BasicParameter.cpp */,
+				9CC794A71A46C04D0027315B /* BasicParameter.h */,
 				9C5AF9B11A3C9E3600F50736 /* CorresBuilder.cpp */,
 				9C5AF9B21A3C9E3600F50736 /* CorresBuilder.h */,
 				9C5AF9B31A3C9E3600F50736 /* DataProvider.cpp */,
 				9C5AF9B41A3C9E3600F50736 /* DataProvider.h */,
 				9C5AF9B51A3C9E3600F50736 /* define.h */,
+				9CC794A81A46C04D0027315B /* Depth2PLY.cpp */,
+				9CC794A91A46C04D0027315B /* Depth2PLY.h */,
 				9C5AF9AA1A3C9DE100F50736 /* main.cpp */,
+				9CC794AA1A46C04D0027315B /* MapDumper.cpp */,
+				9CC794AB1A46C04D0027315B /* MapDumper.h */,
+				9CC794AC1A46C04D0027315B /* MP4Dumper.cpp */,
+				9CC794AD1A46C04D0027315B /* MP4Dumper.h */,
+				9CC794AE1A46C04D0027315B /* ONIDumper.cpp */,
+				9CC794AF1A46C04D0027315B /* ONIDumper.h */,
+				9CC794B01A46C04D0027315B /* Optimizer.cpp */,
+				9CC794B11A46C04D0027315B /* Optimizer.h */,
+				9CC794B21A46C04D0027315B /* OptimizerParameter.cpp */,
+				9CC794B31A46C04D0027315B /* OptimizerParameter.h */,
+				9CC794B41A46C04D0027315B /* Parameter.cpp */,
+				9CC794B51A46C04D0027315B /* Parameter.h */,
 			);
 			path = KALOFution;
 			sourceTree = "<group>";
@@ -159,8 +171,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				9C5AF9AB1A3C9DE100F50736 /* main.cpp in Sources */,
+				9CC794BA1A46C04D0027315B /* ONIDumper.cpp in Sources */,
 				9C5AF9B71A3C9E3600F50736 /* DataProvider.cpp in Sources */,
+				9CC794B61A46C04D0027315B /* BasicParameter.cpp in Sources */,
 				9C5AF9B61A3C9E3600F50736 /* CorresBuilder.cpp in Sources */,
+				9CC794B71A46C04D0027315B /* Depth2PLY.cpp in Sources */,
+				9CC794B91A46C04D0027315B /* MP4Dumper.cpp in Sources */,
+				9CC794BC1A46C04D0027315B /* OptimizerParameter.cpp in Sources */,
+				9CC794B81A46C04D0027315B /* MapDumper.cpp in Sources */,
+				9CC794BB1A46C04D0027315B /* Optimizer.cpp in Sources */,
+				9CC794BD1A46C04D0027315B /* Parameter.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
