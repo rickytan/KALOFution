@@ -123,6 +123,7 @@ int main(int argc, char *argv[])
         using namespace pcl::console;
 
         std::string dump_dir = "./data";
+        int start = 0;
         int step = 25;
         std::string data_dir = "./datadump";
         std::string data_format = "pcd";
@@ -132,12 +133,15 @@ int main(int argc, char *argv[])
         float max_clip = 2.4;
         parse_argument(argc, argv, "--dump-dir", dump_dir);
         parse_argument(argc, argv, "--step", step);
+        parse_argument(argc, argv, "--start", start);
         parse_argument(argc, argv, "--data-dir", data_dir);
         parse_argument(argc, argv, "--format", data_format);
+        
         filter = find_switch(argc, argv, "--filter");
 
         MapDumper dumper(data_dir);
         dumper.setStep(step);
+        dumper.setStart(start);
         dumper.setDumpFormat(data_format);
         dumper.setShouldFilter(filter);
         

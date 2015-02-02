@@ -20,6 +20,7 @@ public:
     MapDumper(const string &map_dir)
         : m_mapDir(map_dir)
         , m_dumpStep(1)
+        , m_dumpStart(0)
         , m_minDepth(0.8)
         , m_maxDepth(2.4)
         , m_dumpFormat("pcd")
@@ -29,6 +30,7 @@ public:
 
     void dumpTo(const string &dump_dir);
     void setStep(int step) { m_dumpStep = step; }
+    void setStart(int start) { m_dumpStart = start; }
     void setMaxClipDepth(float depth) { m_maxDepth = depth; }
     void setMinClipDepth(float depth) { m_minDepth = depth; }
     void setDumpFormat(const string &fmt) { m_dumpFormat = fmt; }
@@ -45,6 +47,7 @@ private:
     string m_dumpFormat;
     string m_cameraPosFile;
     int m_dumpStep;
+    int m_dumpStart;
     std::vector<Eigen::Affine3f> m_cameraPoses;
     float m_minDepth, m_maxDepth;
     float m_normAngleThres;     // the angle between norm and view direction

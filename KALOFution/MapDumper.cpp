@@ -28,7 +28,7 @@ void MapDumper::dumpTo(const string &dump_dir)
 
     using namespace boost::filesystem;
 
-    int map_index = 0;
+    int map_index = m_dumpStart;
     int cloud_index = 0;
     size_t total = m_cameraPoses.size() ? m_cameraPoses.size() : std::count_if(
         directory_iterator(m_mapDir),

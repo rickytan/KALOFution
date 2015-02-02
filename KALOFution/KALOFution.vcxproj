@@ -94,14 +94,14 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>E:\Library\OpenCV-2.4.9\opencv\build\include;E:\usr\include;$(PCL_ROOT)\3rdParty\Boost\include;$(PCL_ROOT)\3rdParty\FLANN\include;..\SuiteSparse\Include;$(PCL_ROOT)\include\pcl-1.6;$(OPEN_NI_INCLUDE)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\usr\include;$(PCL_ROOT)\3rdParty\Boost\include;$(PCL_ROOT)\3rdParty\FLANN\include;..\SuiteSparse\Include;$(PCL_ROOT)\include\pcl-1.6;$(OPEN_NI_INCLUDE)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_DEBUG;EIGEN2_SUPPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(PCL_ROOT)\lib;$(PCL_ROOT)\3rdParty\FLANN\lib;$(PCL_ROOT)\3rdParty\Boost\lib;..\SuiteSparse\Lib64;..\METIS\vs2010\Lib64;E:\Library\OpenCV-2.4.9\opencv\build\x64\vc10\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>pcl_io_$(Configuration).lib;pcl_common_$(Configuration).lib;pcl_kdtree_$(Configuration).lib;pcl_registration_$(Configuration).lib;pcl_io_ply_$(Configuration).lib;pcl_surface_$(Configuration).lib;pcl_search_$(Configuration).lib;CHOLMOD.lib;SuiteSparse_config.lib;METIS.lib;opencv_video249d.lib;opencv_core249d.lib;opencv_highgui249d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>pcl_io_$(Configuration).lib;pcl_common_$(Configuration).lib;pcl_kdtree_$(Configuration).lib;pcl_registration_$(Configuration).lib;pcl_io_ply_$(Configuration).lib;pcl_surface_$(Configuration).lib;pcl_search_$(Configuration).lib;pcl_filters_$(Configuration).lib;CHOLMOD.lib;opencv_video249d.lib;opencv_core249d.lib;opencv_highgui249d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
     </Link>
