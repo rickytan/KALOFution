@@ -20,6 +20,7 @@
 #include <g2o/core/optimization_algorithm_gauss_newton.h>
 #include <g2o/core/optimization_algorithm_levenberg.h>
 #include <g2o/solvers/csparse/linear_solver_csparse.h>
+#include <g2o/types/slam3d/types_slam3d.h>
 
 #include "Optimizer.h"
 #include "OptimizerParameter.h"
@@ -92,8 +93,20 @@ void Optimizer::optimizeUseG2O()
     optimizer.setVerbose(true);
     optimizer.setAlgorithm(optimizationAlgorithm);
 
-    SparseOptimizer::Vertex *vertex = new SparseOptimizer::Vertex;
-    optimizer.addVertex();
+#pragma warning "TODO: "
+    for (size_t cloud_count = 0; cloud_count < m_pointClouds.size(); ++cloud_count)
+    {
+        VertexSE3 *vertex = new VertexSE3;
+        
+        optimizer.addVertex(vertex);
+    }
+
+    for (size_t pair_count = 0; pair_count < m_cloudPairs.size(); ++pair_count)
+    {
+        EdgeSE3 *edge = new EdgeSE3;
+        optimizer.addEdge(edge);
+    }
+
 
 
     optimizer.initializeOptimization();
