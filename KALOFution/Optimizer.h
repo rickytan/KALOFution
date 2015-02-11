@@ -29,6 +29,7 @@ private:
     void optimizeRigid();
     void eachCloudPair(CloudPair &pair);
     void mergeClouds();
+    void optimizeUseG2O();
 private:
     OptimizerParameter &m_params;
 

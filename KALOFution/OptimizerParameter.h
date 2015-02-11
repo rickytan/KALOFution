@@ -24,6 +24,7 @@ public:
     int maxIteration;
     string saveDirectory;
     bool useCholmod;
+    bool g2oOptimize;
 };
 
 #endif  // _OPTIMIZERPARAMETER_H_

@@ -14,6 +14,7 @@ void OptimizerParameter::parse(int argc, char *argv[])
     parse_argument(argc, argv, "--max-iteration", maxIteration);
     parse_argument(argc, argv, "--save-to", saveDirectory);
     useCholmod = find_switch(argc, argv, "--use-cholmod");
+    g2oOptimize = find_switch(argc, argv, "--use-g2o");
 }
 
 void OptimizerParameter::help()

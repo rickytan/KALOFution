@@ -94,14 +94,14 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>E:\usr\include;$(PCL_ROOT)\3rdParty\Boost\include;$(PCL_ROOT)\3rdParty\FLANN\include;..\SuiteSparse\Include;$(PCL_ROOT)\include\pcl-1.6;$(OPEN_NI_INCLUDE)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>_DEBUG;EIGEN2_SUPPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>E:\usr\g2o\include\EXTERNAL\csparse;E:\usr\g2o\include;E:\usr\include;$(PCL_ROOT)\3rdParty\Boost\include;$(PCL_ROOT)\3rdParty\FLANN\include;..\SuiteSparse\Include;$(PCL_ROOT)\include\pcl-1.6;$(OPEN_NI_INCLUDE)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_WINDOWS;_DEBUG;EIGEN2_SUPPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(PCL_ROOT)\lib;$(PCL_ROOT)\3rdParty\FLANN\lib;$(PCL_ROOT)\3rdParty\Boost\lib;..\SuiteSparse\Lib64;..\METIS\vs2010\Lib64;E:\Library\OpenCV-2.4.9\opencv\build\x64\vc10\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>pcl_io_$(Configuration).lib;pcl_common_$(Configuration).lib;pcl_kdtree_$(Configuration).lib;pcl_registration_$(Configuration).lib;pcl_io_ply_$(Configuration).lib;pcl_surface_$(Configuration).lib;pcl_search_$(Configuration).lib;pcl_filters_$(Configuration).lib;CHOLMOD.lib;opencv_video249d.lib;opencv_core249d.lib;opencv_highgui249d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>E:\usr\g2o\lib;$(PCL_ROOT)\lib;$(PCL_ROOT)\3rdParty\FLANN\lib;$(PCL_ROOT)\3rdParty\Boost\lib;..\SuiteSparse\Lib64;..\METIS\vs2010\Lib64;E:\Library\OpenCV-2.4.9\opencv\build\x64\vc10\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>pcl_io_$(Configuration).lib;pcl_common_$(Configuration).lib;pcl_kdtree_$(Configuration).lib;pcl_registration_$(Configuration).lib;pcl_io_ply_$(Configuration).lib;pcl_surface_$(Configuration).lib;pcl_search_$(Configuration).lib;pcl_filters_$(Configuration).lib;CHOLMOD.lib;opencv_video249d.lib;opencv_core249d.lib;opencv_highgui249d.lib;g2o_core_d.lib;g2o_csparse_extension_d.lib;g2o_ext_csparse_d.lib;g2o_opengl_helper_d.lib;g2o_solver_csparse_d.lib;g2o_stuff_d.lib;g2o_types_slam2d_d.lib;g2o_types_slam3d_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
     </Link>
@@ -130,16 +130,16 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>E:\usr\include;$(PCL_ROOT)\3rdParty\Boost\include;$(PCL_ROOT)\3rdParty\FLANN\include;..\SuiteSparse\Include;$(PCL_ROOT)\include\pcl-1.6;$(OPEN_NI_INCLUDE)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>E:\usr\g2o\include\EXTERNAL\csparse;E:\usr\g2o\include;E:\usr\include;$(PCL_ROOT)\3rdParty\Boost\include;$(PCL_ROOT)\3rdParty\FLANN\include;..\SuiteSparse\Include;$(PCL_ROOT)\include\pcl-1.6;$(OPEN_NI_INCLUDE)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_WINDOWS;WIN32;NDEBUG;EIGEN2_SUPPORT;_CONSOLE;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>pcl_io_$(Configuration).lib;pcl_common_$(Configuration).lib;pcl_kdtree_$(Configuration).lib;pcl_registration_$(Configuration).lib;pcl_io_ply_$(Configuration).lib;pcl_surface_$(Configuration).lib;pcl_search_$(Configuration).lib;pcl_filters_$(Configuration).lib;CHOLMOD.lib;opencv_video249.lib;opencv_core249.lib;opencv_highgui249.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(PCL_ROOT)\lib;$(PCL_ROOT)\3rdParty\FLANN\lib;$(PCL_ROOT)\3rdParty\Boost\lib;..\SuiteSparse\Lib64;..\METIS\vs2010\Lib64;E:\Library\OpenCV-2.4.9\opencv\build\x64\vc10\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>pcl_io_$(Configuration).lib;pcl_common_$(Configuration).lib;pcl_kdtree_$(Configuration).lib;pcl_registration_$(Configuration).lib;pcl_io_ply_$(Configuration).lib;pcl_surface_$(Configuration).lib;pcl_search_$(Configuration).lib;pcl_filters_$(Configuration).lib;CHOLMOD.lib;opencv_video249.lib;opencv_core249.lib;opencv_highgui249.lib;g2o_core.lib;g2o_csparse_extension.lib;g2o_ext_csparse.lib;g2o_opengl_helper.lib;g2o_solver_csparse.lib;g2o_stuff.lib;g2o_types_slam2d.lib;g2o_types_slam3d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>E:\usr\g2o\lib;$(PCL_ROOT)\lib;$(PCL_ROOT)\3rdParty\FLANN\lib;$(PCL_ROOT)\3rdParty\Boost\lib;..\SuiteSparse\Lib64;..\METIS\vs2010\Lib64;E:\Library\OpenCV-2.4.9\opencv\build\x64\vc10\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

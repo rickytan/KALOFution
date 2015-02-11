@@ -15,6 +15,12 @@
 #include <boost/thread/mutex.hpp>
 #include <boost/filesystem.hpp>
 
+#include <g2o/core/sparse_optimizer.h>
+#include <g2o/core/block_solver.h>
+#include <g2o/core/optimization_algorithm_gauss_newton.h>
+#include <g2o/core/optimization_algorithm_levenberg.h>
+#include <g2o/solvers/csparse/linear_solver_csparse.h>
+
 #include "Optimizer.h"
 #include "OptimizerParameter.h"
 
@@ -62,6 +68,54 @@ Optimizer::Optimizer(OptimizerParameter &params)
 
 Optimizer::~Optimizer()
 {
+}
+
+void Optimizer::optimizeUseG2O()
+{
+    using namespace g2o;
+    // create the linear solver
+    BlockSolverX::LinearSolverType * linearSolver = new LinearSolverCSparse<BlockSolverX::PoseMatrixType>();
+
+    // create the block solver on top of the linear solver
+    BlockSolverX* blockSolver = new BlockSolverX(linearSolver);
+
+    // create the algorithm to carry out the optimization
+    //OptimizationAlgorithmGaussNewton* optimizationAlgorithm = new OptimizationAlgorithmGaussNewton(blockSolver);
+    OptimizationAlgorithmLevenberg* optimizationAlgorithm = new OptimizationAlgorithmLevenberg(blockSolver);
+
+    // NOTE: We skip to fix a variable here, either this is stored in the file
+    // itself or Levenberg will handle it.
+
+    // create the optimizer to load the data and carry out the optimization
+    SparseOptimizer optimizer;
+    SparseOptimizer::initMultiThreading();
+    optimizer.setVerbose(true);
+    optimizer.setAlgorithm(optimizationAlgorithm);
+
+    SparseOptimizer::Vertex *vertex = new SparseOptimizer::Vertex;
+    optimizer.addVertex();
+
+
+    optimizer.initializeOptimization();
+    {
+        pcl::ScopeTime time("g2o optimizing");
+        optimizer.optimize(8);
+    }
+
+    PCL_WARN("Opitimization DONE!!!!\n");
+
+    if (m_params.saveDirectory.length()) {
+        if (boost::filesystem::exists(m_params.saveDirectory) && !boost::filesystem::is_directory(m_params.saveDirectory)) {
+            boost::filesystem::remove(m_params.saveDirectory);
+        }
+        boost::filesystem::create_directories(m_params.saveDirectory);
+
+        char filename[1024] = { 0 };
+        for (size_t i = 0; i < m_pointClouds.size(); ++i) {
+            sprintf(filename, "%s/cloud_%d.ply", m_params.saveDirectory.c_str(), i);
+            pcl::io::savePLYFileBinary(filename, *m_pointClouds[i]);
+        }
+    }
 }
 
 void Optimizer::optimizeRigid()
@@ -214,8 +268,13 @@ void Optimizer::operator()(std::vector<CloudTypePtr> &pointClouds, std::vector<C
 {
     m_pointClouds = pointClouds;
     m_cloudPairs = cloudPaire;
-
-    optimizeRigid();
+    
+    if (m_params.g2oOptimize) {
+        optimizeUseG2O();
+    }
+    else {
+        optimizeRigid();
+    }
 }
 
 void Optimizer::mergeClouds()
