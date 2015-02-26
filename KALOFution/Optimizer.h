@@ -10,7 +10,9 @@
 #include <Eigen/StdVector>
 
 class OptimizerParameter;
-class boost::mutex;
+namespace boost {
+    class mutex;
+}
 
 typedef Eigen::VectorXd                                     Vec;
 typedef Eigen::SparseMatrix<double>                         Mat;

@@ -13,7 +13,6 @@
 		9CC794B61A46C04D0027315B /* BasicParameter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9CC794A61A46C04D0027315B /* BasicParameter.cpp */; };
 		9CC794B71A46C04D0027315B /* Depth2PLY.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9CC794A81A46C04D0027315B /* Depth2PLY.cpp */; };
 		9CC794B81A46C04D0027315B /* MapDumper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9CC794AA1A46C04D0027315B /* MapDumper.cpp */; };
-		9CC794B91A46C04D0027315B /* MP4Dumper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9CC794AC1A46C04D0027315B /* MP4Dumper.cpp */; };
 		9CC794BA1A46C04D0027315B /* ONIDumper.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9CC794AE1A46C04D0027315B /* ONIDumper.cpp */; };
 		9CC794BB1A46C04D0027315B /* Optimizer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9CC794B01A46C04D0027315B /* Optimizer.cpp */; };
 		9CC794BC1A46C04D0027315B /* OptimizerParameter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9CC794B21A46C04D0027315B /* OptimizerParameter.cpp */; };
@@ -46,8 +45,6 @@
 		9CC794A91A46C04D0027315B /* Depth2PLY.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Depth2PLY.h; sourceTree = "<group>"; };
 		9CC794AA1A46C04D0027315B /* MapDumper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MapDumper.cpp; sourceTree = "<group>"; };
 		9CC794AB1A46C04D0027315B /* MapDumper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapDumper.h; sourceTree = "<group>"; };
-		9CC794AC1A46C04D0027315B /* MP4Dumper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MP4Dumper.cpp; sourceTree = "<group>"; };
-		9CC794AD1A46C04D0027315B /* MP4Dumper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MP4Dumper.h; sourceTree = "<group>"; };
 		9CC794AE1A46C04D0027315B /* ONIDumper.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ONIDumper.cpp; sourceTree = "<group>"; };
 		9CC794AF1A46C04D0027315B /* ONIDumper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ONIDumper.h; sourceTree = "<group>"; };
 		9CC794B01A46C04D0027315B /* Optimizer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Optimizer.cpp; sourceTree = "<group>"; };
@@ -100,8 +97,6 @@
 				9C5AF9AA1A3C9DE100F50736 /* main.cpp */,
 				9CC794AA1A46C04D0027315B /* MapDumper.cpp */,
 				9CC794AB1A46C04D0027315B /* MapDumper.h */,
-				9CC794AC1A46C04D0027315B /* MP4Dumper.cpp */,
-				9CC794AD1A46C04D0027315B /* MP4Dumper.h */,
 				9CC794AE1A46C04D0027315B /* ONIDumper.cpp */,
 				9CC794AF1A46C04D0027315B /* ONIDumper.h */,
 				9CC794B01A46C04D0027315B /* Optimizer.cpp */,
@@ -176,7 +171,6 @@
 				9CC794B61A46C04D0027315B /* BasicParameter.cpp in Sources */,
 				9C5AF9B61A3C9E3600F50736 /* CorresBuilder.cpp in Sources */,
 				9CC794B71A46C04D0027315B /* Depth2PLY.cpp in Sources */,
-				9CC794B91A46C04D0027315B /* MP4Dumper.cpp in Sources */,
 				9CC794BC1A46C04D0027315B /* OptimizerParameter.cpp in Sources */,
 				9CC794B81A46C04D0027315B /* MapDumper.cpp in Sources */,
 				9CC794BB1A46C04D0027315B /* Optimizer.cpp in Sources */,
@@ -268,9 +262,10 @@
 					/usr/local/include,
 					/usr/local/include/eigen3,
 					"/usr/local/include/pcl-1.6",
-					/usr/local/include/ni,
+					/usr/include/ni,
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(SRCROOT)/SuiteSparse/Include",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					/usr/local/lib,
@@ -288,9 +283,10 @@
 					/usr/local/include,
 					/usr/local/include/eigen3,
 					"/usr/local/include/pcl-1.6",
-					/usr/local/include/ni,
+					/usr/include/ni,
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"$(SRCROOT)/SuiteSparse/Include",
 				);
 				LIBRARY_SEARCH_PATHS = (
 					/usr/local/lib,

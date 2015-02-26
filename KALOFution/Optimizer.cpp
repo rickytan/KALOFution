@@ -1,6 +1,8 @@
 #include <fstream>
 #include <iostream>
 
+#include "define.h"
+
 #include <Eigen/SparseCholesky>
 #include <Eigen/CholmodSupport>
 #include <Eigen/Geometry>

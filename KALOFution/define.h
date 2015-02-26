@@ -8,9 +8,8 @@
 
 #ifdef WIN32
 
-#endif
+#else
 
-/*
 namespace Eigen {
     namespace internal {
         static inline double sqrt(double a) { return sqrt(a); }
@@ -18,13 +17,16 @@ namespace Eigen {
         static inline double sin(double a) { return sin(a); }
     }
 }
-*/
+
+#endif
+
+
 
 #include <pcl/point_types.h>
 #include <pcl/point_cloud.h>
 #include <boost/math/special_functions.hpp>
 
-using boost::math::isnan;
+//using boost::math::isnan;
 
 typedef pcl::PointNormal PointType;
 typedef pcl::PointCloud<PointType> CloudType;
