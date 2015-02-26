@@ -67,7 +67,7 @@ CloudTypePtr MapDumper::mapToCloud(std::vector<float> &vmap, std::vector<float> 
             Eigen::Vector3f norm;
             PointType point;
             point.normal_x = nmap[640 * (0 * 480 + row) + col];
-            if (isnan(point.normal_x)) {
+            if (pcl_isnan(point.normal_x)) {
                 ++nan_count;
                 continue;
             }
@@ -76,7 +76,7 @@ CloudTypePtr MapDumper::mapToCloud(std::vector<float> &vmap, std::vector<float> 
 
             point.x  = vmap[640 * (0 * 480 + row) + col];
 
-            if (isnan(point.x)) {
+            if (pcl_isnan(point.x)) {
                 ++nan_count;
                 continue;
             }

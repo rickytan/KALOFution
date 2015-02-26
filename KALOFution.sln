@@ -1,11 +1,9 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
-MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "KALOFution", "KALOFution\KALOFution.vcxproj", "{D07FA3C3-FD0A-499E-B73D-007AEED6AAE2}"
-EndProject
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{7FD8E149-6C7D-4B6C-8C04-4B4E205AAB81}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "KALOFution", "KALOFution\KALOFution.vcxproj", "{D07FA3C3-FD0A-499E-B73D-007AEED6AAE2}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "P2PlaneAlign", "P2PlaneAlign\P2PlaneAlign.vcxproj", "{58046EEE-DE19-4603-9CAC-9B6EBC0DC934}"
 EndProject
