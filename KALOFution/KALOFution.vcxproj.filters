@@ -24,31 +24,28 @@
     <ClInclude Include=".\define.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\ricky%27s work\KALOFution\KALOFution\BasicParameter.h">
+    <ClInclude Include=".\BasicParameter.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\ricky%27s work\KALOFution\KALOFution\Depth2PLY.h">
+    <ClInclude Include=".\Depth2PLY.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\ricky%27s work\KALOFution\KALOFution\ONIDumper.h">
+    <ClInclude Include=".\MapDumper.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\ricky%27s work\KALOFution\KALOFution\Optimizer.h">
+    <ClInclude Include=".\MeshGenerator.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\ricky%27s work\KALOFution\KALOFution\OptimizerParameter.h">
+    <ClInclude Include=".\ONIDumper.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\ricky%27s work\KALOFution\KALOFution\Parameter.h">
+    <ClInclude Include=".\Optimizer.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\ricky%27s work\KALOFution\KALOFution\MP4Dumper.h">
+    <ClInclude Include=".\OptimizerParameter.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\ricky%27s work\KALOFution\KALOFution\MapDumper.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\ricky%27s work\KALOFution\KALOFution\MeshGenerator.h">
+    <ClInclude Include=".\Parameter.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
@@ -62,31 +59,28 @@
     <ClCompile Include=".\main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\ricky%27s work\KALOFution\KALOFution\BasicParameter.cpp">
+    <ClCompile Include=".\BasicParameter.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\ricky%27s work\KALOFution\KALOFution\Depth2PLY.cpp">
+    <ClCompile Include=".\Depth2PLY.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\ricky%27s work\KALOFution\KALOFution\ONIDumper.cpp">
+    <ClCompile Include=".\MapDumper.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\ricky%27s work\KALOFution\KALOFution\Optimizer.cpp">
+    <ClCompile Include=".\MeshGenerator.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\ricky%27s work\KALOFution\KALOFution\OptimizerParameter.cpp">
+    <ClCompile Include=".\ONIDumper.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\ricky%27s work\KALOFution\KALOFution\Parameter.cpp">
+    <ClCompile Include=".\Optimizer.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\ricky%27s work\KALOFution\KALOFution\MP4Dumper.cpp">
+    <ClCompile Include=".\OptimizerParameter.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\ricky%27s work\KALOFution\KALOFution\MapDumper.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\ricky%27s work\KALOFution\KALOFution\MeshGenerator.cpp">
+    <ClCompile Include=".\Parameter.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

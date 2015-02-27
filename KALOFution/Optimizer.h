@@ -9,10 +9,9 @@
 #include <Eigen/SparseCore>
 #include <Eigen/StdVector>
 
+#include <boost/thread.hpp>
+
 class OptimizerParameter;
-namespace boost {
-    class mutex;
-}
 
 typedef Eigen::VectorXd                                     Vec;
 typedef Eigen::SparseMatrix<double>                         Mat;

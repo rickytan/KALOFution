@@ -8,9 +8,7 @@
 
 #include "define.h"
 
-namespace boost {
-    class mutex;
-}
+#include <boost/thread.hpp>
 
 using namespace std;
 

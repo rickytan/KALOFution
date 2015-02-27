@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -94,7 +94,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>E:\usr\g2o\include\EXTERNAL\csparse;E:\usr\g2o\include;E:\usr\include;$(PCL_ROOT)\3rdParty\Boost\include;$(PCL_ROOT)\3rdParty\FLANN\include;..\SuiteSparse\Include;$(PCL_ROOT)\include\pcl-1.6;$(OPEN_NI_INCLUDE)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\usr\g2o\include\EXTERNAL\csparse;E:\usr\g2o\include;E:\usr\include;$(PCL_ROOT)\3rdParty\Eigen\include;$(PCL_ROOT)\3rdParty\Boost\include;$(PCL_ROOT)\3rdParty\FLANN\include;..\SuiteSparse\Include;$(PCL_ROOT)\include\pcl-1.6;$(OPEN_NI_INCLUDE)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WINDOWS;_DEBUG;EIGEN2_SUPPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
@@ -113,7 +113,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(PCL_ROOT)/3rdParty/Boost/include;$(OPEN_NI_INCLUDE);E:\usr\include;.\SuiteSparse\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(PCL_ROOT)/3rdParty/Eigen/include;$(PCL_ROOT)/3rdParty/Boost/include;$(OPEN_NI_INCLUDE);E:\usr\include;.\SuiteSparse\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -130,7 +130,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>E:\usr\g2o\include\EXTERNAL\csparse;E:\usr\g2o\include;E:\usr\include;$(PCL_ROOT)\3rdParty\Boost\include;$(PCL_ROOT)\3rdParty\FLANN\include;..\SuiteSparse\Include;$(PCL_ROOT)\include\pcl-1.6;$(OPEN_NI_INCLUDE)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\usr\g2o\include\EXTERNAL\csparse;E:\usr\g2o\include;E:\usr\include;$(PCL_ROOT)\3rdParty\Eigen\include;$(PCL_ROOT)\3rdParty\Boost\include;$(PCL_ROOT)\3rdParty\FLANN\include;..\SuiteSparse\Include;$(PCL_ROOT)\include\pcl-1.6;$(OPEN_NI_INCLUDE)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WINDOWS;WIN32;NDEBUG;EIGEN2_SUPPORT;_CONSOLE;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
@@ -147,7 +147,6 @@
     <ClInclude Include=".\Depth2PLY.h" />
     <ClInclude Include=".\MapDumper.h" />
     <ClInclude Include=".\MeshGenerator.h" />
-    <ClInclude Include=".\MP4Dumper.h" />
     <ClInclude Include=".\ONIDumper.h" />
     <ClInclude Include=".\Optimizer.h" />
     <ClInclude Include=".\OptimizerParameter.h" />
@@ -161,7 +160,6 @@
     <ClCompile Include=".\Depth2PLY.cpp" />
     <ClCompile Include=".\MapDumper.cpp" />
     <ClCompile Include=".\MeshGenerator.cpp" />
-    <ClCompile Include=".\MP4Dumper.cpp" />
     <ClCompile Include=".\ONIDumper.cpp" />
     <ClCompile Include=".\Optimizer.cpp" />
     <ClCompile Include=".\OptimizerParameter.cpp" />
