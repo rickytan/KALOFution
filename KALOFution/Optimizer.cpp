@@ -38,6 +38,8 @@ public:
         fillBlock(col, col, vec1 * vec1.transpose());
     }
     void add(int r, int c, double v) {
+        m_tripletToFill.push_back(Tri(r, c, v));
+        /*
         if (!m_indexMap.count(r)) {
             m_indexMap[r] = std::map<int, size_t>();
         }
@@ -48,6 +50,7 @@ public:
         else {
             m_tripletToFill[m_indexMap[r][c]].m_value += v;
         }
+         */
     }
 private:
     void fillBlock(int block_r, int block_c, const Eigen::Matrix<double, 6, 6> &mat) {
