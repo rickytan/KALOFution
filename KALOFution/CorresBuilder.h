@@ -1,13 +1,14 @@
+#pragma once
 #ifndef _CORRESBUILDER_H_
 #define _CORRESBUILDER_H_
+
+#include "define.h"
 
 #include <vector>
 #include <map>
 
 #include <Eigen/Dense>
 #include <Eigen/StdVector>
-
-#include "define.h"
 
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>

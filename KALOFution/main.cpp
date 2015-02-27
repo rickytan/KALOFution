@@ -168,7 +168,7 @@ int main(int argc, char *argv[])
 
         boost::filesystem::path path(out_file);
         if (path.extension() != ".ply") {
-            PCL_ERROR("Unsupported file type : %s\n", path.extension());
+            PCL_ERROR("Unsupported file type : %s\n", path.extension().string().c_str());
             return 0;
         }
 

@@ -261,6 +261,7 @@
 				HEADER_SEARCH_PATHS = (
 					/usr/local/include,
 					/usr/local/include/eigen3,
+					/usr/local/include/EXTERNAL/csparse,
 					"/usr/local/include/pcl-1.6",
 					/usr/include/ni,
 					"$(inherited)",
@@ -282,6 +283,7 @@
 				HEADER_SEARCH_PATHS = (
 					/usr/local/include,
 					/usr/local/include/eigen3,
+					/usr/local/include/EXTERNAL/csparse,
 					"/usr/local/include/pcl-1.6",
 					/usr/include/ni,
 					"$(inherited)",

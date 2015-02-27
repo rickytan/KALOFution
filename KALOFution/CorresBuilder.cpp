@@ -1,10 +1,5 @@
 #include <limits>
 #include <numeric>
-#include <cfloat>
-#include <cmath>
-#include <fstream>
-#include <cstdio>
-#include <cstdlib>
 #include <algorithm>
 
 #include "CorresBuilder.h"
@@ -63,7 +58,6 @@ void CorresBuilder::operator()(DataProvider& provider)
 
 void CorresBuilder::initCloudAndTransform(DataProvider& provider)
 {
-    using namespace boost::math;
     m_pointClouds.resize(provider.size());
 
     for (uint32_t i = 0; i < provider.size(); ++i)
@@ -72,7 +66,7 @@ void CorresBuilder::initCloudAndTransform(DataProvider& provider)
         CloudTypePtr cloud(new CloudType);
         for (int j = 0; j < rawCloud->points.size(); ++j)
         {
-            if (!isnan(rawCloud->points[j].normal_x)) {
+            if (!pcl_isnan(rawCloud->points[j].normal_x)) {
                 cloud->push_back(rawCloud->points[j]);
             }
         }
