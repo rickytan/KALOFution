@@ -102,13 +102,24 @@ void Optimizer::optimizeUseG2O()
     for (size_t cloud_count = 0; cloud_count < m_pointClouds.size(); ++cloud_count)
     {
         VertexSE3 *vertex = new VertexSE3;
-        
+        vertex->setId(cloud_count);
+		Isometry3D affine;
+		affine.linear() = m_pointClouds[cloud_count]->sensor_orientation_.toRotationMatrix();
+		affine.translation() = m_pointClouds[cloud_count]->sensor_origin_.block<3, 1>(0, 0);
+		vertex->setEstimate(affine);
         optimizer.addVertex(vertex);
     }
+	optimizer.vertex(0)->setFixed(true);
 
     for (size_t pair_count = 0; pair_count < m_cloudPairs.size(); ++pair_count)
     {
+		int from = m_cloudPairs[pair_count].corresIdx.first;
+		int to = m_cloudPairs[pair_count].corresIdx.second;
         EdgeSE3 *edge = new EdgeSE3;
+		edge->vertices()[0] = optimizer.vertex(from);
+		edge->vertices()[1] = optimizer.vertex(to);
+		edge->setMeasurementFromState();
+		//edge->setInformation();
         optimizer.addEdge(edge);
     }
 

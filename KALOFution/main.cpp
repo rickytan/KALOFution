@@ -79,7 +79,10 @@ int main(int argc, char *argv[])
         std::vector<CloudTypePtr> clouds;
         for (size_t i = 0; i < provider.size(); ++i) {
             CloudTypePtr trans(new CloudType);
-            pcl::transformPointCloudWithNormals(*provider[i], *trans, provider.initTransformOfCloudAtIndex(i));
+			Eigen::Affine3f affine = provider.initTransformOfCloudAtIndex(i);
+            pcl::transformPointCloudWithNormals(*provider[i], *trans, affine);
+			trans->sensor_orientation_ = Eigen::Quaternionf(affine.linear());
+			trans->sensor_origin_ = Eigen::Vector4f(affine.translation()[0], affine.translation()[1], affine.translation()[2], 1.f);
             clouds.push_back(trans);
         }
 

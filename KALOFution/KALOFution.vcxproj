@@ -94,7 +94,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>E:\usr\g2o\include\EXTERNAL\csparse;E:\usr\g2o\include;E:\usr\include;$(PCL_ROOT)\3rdParty\Eigen\include;$(PCL_ROOT)\3rdParty\Boost\include;$(PCL_ROOT)\3rdParty\FLANN\include;..\SuiteSparse\Include;$(PCL_ROOT)\include\pcl-1.6;$(OPEN_NI_INCLUDE)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\usr\g2o\include\EXTERNAL\csparse;E:\usr\g2o\include;E:\usr\include;$(PCL_ROOT)\3rdParty;$(PCL_ROOT)\3rdParty\csparse;$(PCL_ROOT)\3rdParty\Eigen\include;$(PCL_ROOT)\3rdParty\Boost\include;$(PCL_ROOT)\3rdParty\FLANN\include;..\SuiteSparse\Include;$(PCL_ROOT)\include\pcl-1.6;$(OPEN_NI_INCLUDE)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WINDOWS;_DEBUG;EIGEN2_SUPPORT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
@@ -130,7 +130,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>E:\usr\g2o\include\EXTERNAL\csparse;E:\usr\g2o\include;E:\usr\include;$(PCL_ROOT)\3rdParty\Eigen\include;$(PCL_ROOT)\3rdParty\Boost\include;$(PCL_ROOT)\3rdParty\FLANN\include;..\SuiteSparse\Include;$(PCL_ROOT)\include\pcl-1.6;$(OPEN_NI_INCLUDE)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\usr\g2o\include\EXTERNAL\csparse;E:\usr\g2o\include;E:\usr\include;$(PCL_ROOT)\3rdParty;$(PCL_ROOT)\3rdParty\csparse;$(PCL_ROOT)\3rdParty\Eigen\include;$(PCL_ROOT)\3rdParty\Boost\include;$(PCL_ROOT)\3rdParty\FLANN\include;..\SuiteSparse\Include;$(PCL_ROOT)\include\pcl-1.6;$(OPEN_NI_INCLUDE)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_WINDOWS;WIN32;NDEBUG;EIGEN2_SUPPORT;_CONSOLE;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>

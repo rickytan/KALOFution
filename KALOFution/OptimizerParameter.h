@@ -23,6 +23,7 @@ public:
 
     int maxIteration;
     string saveDirectory;
+	string poseFile;
     bool useCholmod;
     bool g2oOptimize;
 };

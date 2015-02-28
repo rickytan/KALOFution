@@ -8,6 +8,14 @@
 
 #ifdef WIN32
 
+namespace Eigen {
+	namespace internal {
+		static inline double sqrt(double a) { return sqrt(a); }
+		static inline double cos(double a) { return cos(a); }
+		static inline double sin(double a) { return sin(a); }
+	}
+}
+
 #else
 
 namespace Eigen {
