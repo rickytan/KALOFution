@@ -104,8 +104,8 @@ void Optimizer::optimizeUseG2O()
         VertexSE3 *vertex = new VertexSE3;
         vertex->setId(cloud_count);
 		Isometry3D affine;
-		affine.linear() = m_pointClouds[cloud_count]->sensor_orientation_.toRotationMatrix();
-		affine.translation() = m_pointClouds[cloud_count]->sensor_origin_.block<3, 1>(0, 0);
+        affine.linear() = m_pointClouds[cloud_count]->sensor_orientation_.toRotationMatrix().cast<Isometry3D::Scalar>();
+		affine.translation() = m_pointClouds[cloud_count]->sensor_origin_.block<3, 1>(0, 0).cast<Isometry3D::Scalar>();
 		vertex->setEstimate(affine);
         optimizer.addVertex(vertex);
     }
