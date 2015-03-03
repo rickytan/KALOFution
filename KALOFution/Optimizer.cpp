@@ -155,7 +155,7 @@ void Optimizer::optimizeUseG2O()
     {
         pcl::ScopeTime time("g2o optimizing");
         optimizer.initializeOptimization();
-        optimizer.optimize(8);
+        optimizer.optimize(10);
     }
     optimizer.save("debug_postOpt.g2o");
 
