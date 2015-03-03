@@ -6,8 +6,8 @@
 #include <fstream>
 #include <iostream>
 
-#ifdef WIN32
-
+#ifdef _MSC_VER
+/*
 namespace Eigen {
 	namespace internal {
 		static inline double sqrt(double a) { return sqrt(a); }
@@ -15,7 +15,7 @@ namespace Eigen {
 		static inline double sin(double a) { return sin(a); }
 	}
 }
-
+*/
 #else
 
 namespace Eigen {

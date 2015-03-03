@@ -19,6 +19,7 @@
 
 #include <g2o/core/sparse_optimizer.h>
 #include <g2o/core/block_solver.h>
+#include <g2o/core/factory.h>
 #include <g2o/core/optimization_algorithm_gauss_newton.h>
 #include <g2o/core/optimization_algorithm_levenberg.h>
 #include <g2o/solvers/csparse/linear_solver_csparse.h>
@@ -26,6 +27,7 @@
 
 #include "Optimizer.h"
 #include "OptimizerParameter.h"
+
 
 class SparseMatFiller {
 public:
@@ -76,9 +78,15 @@ Optimizer::~Optimizer()
 {
 }
 
+using namespace g2o;
+
+G2O_USE_TYPE_GROUP(slam2d);
+G2O_USE_TYPE_GROUP(slam3d);
+
 void Optimizer::optimizeUseG2O()
 {
-    using namespace g2o;
+
+
     // create the linear solver
     BlockSolverX::LinearSolverType * linearSolver = new LinearSolverCSparse<BlockSolverX::PoseMatrixType>();
 
@@ -98,37 +106,68 @@ void Optimizer::optimizeUseG2O()
     optimizer.setVerbose(true);
     optimizer.setAlgorithm(optimizationAlgorithm);
 
-#pragma warning "TODO: "
-    for (size_t cloud_count = 0; cloud_count < m_pointClouds.size(); ++cloud_count)
     {
-        VertexSE3 *vertex = new VertexSE3;
-        vertex->setId(cloud_count);
-		Isometry3D affine;
-        affine.linear() = m_pointClouds[cloud_count]->sensor_orientation_.toRotationMatrix().cast<Isometry3D::Scalar>();
-		affine.translation() = m_pointClouds[cloud_count]->sensor_origin_.block<3, 1>(0, 0).cast<Isometry3D::Scalar>();
-		vertex->setEstimate(affine);
-        optimizer.addVertex(vertex);
-    }
-	optimizer.vertex(0)->setFixed(true);
-
-    for (size_t pair_count = 0; pair_count < m_cloudPairs.size(); ++pair_count)
-    {
-		int from = m_cloudPairs[pair_count].corresIdx.first;
-		int to = m_cloudPairs[pair_count].corresIdx.second;
-        EdgeSE3 *edge = new EdgeSE3;
-		edge->vertices()[0] = optimizer.vertex(from);
-		edge->vertices()[1] = optimizer.vertex(to);
-		edge->setMeasurementFromState();
-		//edge->setInformation();
-        optimizer.addEdge(edge);
+        pcl::ScopeTime time("G2O setup Graph vertices");
+        for (size_t cloud_count = 0; cloud_count < m_pointClouds.size(); ++cloud_count)
+        {
+            VertexSE3 *vertex = new VertexSE3;
+            vertex->setId(cloud_count);
+            Isometry3D affine;
+            affine.linear() = m_pointClouds[cloud_count]->sensor_orientation_.toRotationMatrix().cast<Isometry3D::Scalar>();
+            affine.translation() = m_pointClouds[cloud_count]->sensor_origin_.block<3, 1>(0, 0).cast<Isometry3D::Scalar>();
+            vertex->setEstimate(affine);
+            optimizer.addVertex(vertex);
+        }
+        optimizer.vertex(0)->setFixed(true);
     }
 
+    {
+        pcl::ScopeTime time("G2O setup Graph edges");
+        for (size_t pair_count = 0; pair_count < m_cloudPairs.size(); ++pair_count)
+        {
+            CloudPair pair = m_cloudPairs[pair_count];
+		    int from = pair.corresIdx.first;
+		    int to = pair.corresIdx.second;
+            EdgeSE3 *edge = new EdgeSE3;
+		    edge->vertices()[0] = optimizer.vertex(from);
+		    edge->vertices()[1] = optimizer.vertex(to);
+		    edge->setMeasurementFromState();
 
+            EdgeSE3::InformationType ATA;
+            ATA.setZero();
+#pragma unroll 8
+            for (size_t point_count = 0; point_count < pair.corresPointIdx.size(); ++point_count) {
+                int point_q = pair.corresPointIdx[point_count].second;
+                PointType Q = m_pointClouds[to]->points[point_q];
 
+                Eigen::Matrix<double, 3, 6> A;
+                A <<  1, 0, 0,        0,  2 * Q.z, -2 * Q.y,
+                      0, 1, 0, -2 * Q.z,        0,  2 * Q.x,
+                      0, 0, 1,  2 * Q.y, -2 * Q.x,        0;
+                ATA += A.transpose() * A;
+            }
+		    edge->setInformation(ATA);
+            optimizer.addEdge(edge);
+        }
+    }
+
+    optimizer.save("debug_preOpt.g2o");
     optimizer.initializeOptimization();
     {
         pcl::ScopeTime time("g2o optimizing");
         optimizer.optimize(8);
+    }
+    optimizer.save("debug_postOpt.g2o");
+
+    for (size_t cloud_count = 0; cloud_count < m_pointClouds.size(); ++cloud_count)
+    {
+        CloudTypePtr tmp(new CloudType);
+        Isometry3D trans = ((VertexSE3 *)optimizer.vertices()[cloud_count])->estimate();
+        Eigen::Affine3d affine;
+        affine.linear() = trans.rotation();
+        affine.translation() = trans.translation();
+        pcl::transformPointCloudWithNormals(*m_pointClouds[cloud_count], *tmp, affine.cast<float>());
+        pcl::copyPointCloud(*tmp, *m_pointClouds[cloud_count]);
     }
 
     PCL_WARN("Opitimization DONE!!!!\n");
