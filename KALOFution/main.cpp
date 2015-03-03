@@ -3,7 +3,7 @@
 #include "DataProvider.h"
 #include "CorresBuilder.h"
 #include "ONIDumper.h"
-#include "MP4Dumper.h"
+//#include "MP4Dumper.h"
 #include "MapDumper.h"
 #include "OptimizerParameter.h"
 #include "Optimizer.h"
@@ -80,9 +80,14 @@ int main(int argc, char *argv[])
         for (size_t i = 0; i < provider.size(); ++i) {
             CloudTypePtr trans(new CloudType);
 			Eigen::Affine3f affine = provider.initTransformOfCloudAtIndex(i);
-            pcl::transformPointCloudWithNormals(*provider[i], *trans, affine);
-			trans->sensor_orientation_ = Eigen::Quaternionf(affine.linear());
-			trans->sensor_origin_ = Eigen::Vector4f(affine.translation()[0], affine.translation()[1], affine.translation()[2], 1.f);
+            if (!oparam.g2oOptimize) {
+                pcl::transformPointCloudWithNormals(*provider[i], *trans, affine);
+            }
+            else {
+                pcl::copyPointCloud(*provider[i], *trans);
+			    trans->sensor_orientation_ = Eigen::Quaternionf(affine.linear());
+			    trans->sensor_origin_ = Eigen::Vector4f(affine.translation()[0], affine.translation()[1], affine.translation()[2], 1.f);
+            }
             clouds.push_back(trans);
         }
 
@@ -115,12 +120,14 @@ int main(int argc, char *argv[])
         dumper.dumpTo(argv[4]);
     }
     else if (sub_prog == "dumpvideo") {
+        /*
         if (argc < 5) {
             printf("Usage:\n\n\t%s <file.mp4> <dump dir>\n", argv[0]);
             return 0;
         }
         MP4Dumper dumper(argv[3]);
         dumper.dumpTo(argv[4]);
+        */
     }
     else if (sub_prog == "dumpmap") {
         using namespace pcl::console;
