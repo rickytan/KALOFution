@@ -39,9 +39,24 @@ namespace Eigen {
 typedef pcl::PointNormal PointType;
 typedef pcl::PointCloud<PointType> CloudType;
 typedef pcl::PointCloud<PointType>::Ptr CloudTypePtr;
-typedef std::pair<int, int> PointPair;
+
 typedef Eigen::Affine3f CloudTransform;
 
+struct PointPair: public std::pair<int, int> {
+    typedef struct {
+        bool operator()(const PointPair& _Left, const PointPair& _Right) const {
+            return _Left.quality > _Right.quality;
+        }
+    } PointPairComparer;
+
+    PointPair(): std::pair<int, int>(), quality(0.f) {}
+    PointPair(int first, int second, float q = 0.f) {
+        this->first = first;
+        this->second = second;
+        this->quality = q;
+    }
+    float quality;
+};
 
 typedef struct CloudPair {
     std::pair<int, int> corresIdx;
@@ -59,7 +74,7 @@ typedef struct CloudPair {
         if (infile.is_open()) {
             int p0, p1;
             while (infile >> p0 >> p1) {
-                corresPointIdx.push_back(std::make_pair(p0, p1));
+                corresPointIdx.push_back(PointPair(p0, p1));
             }
             infile.close();
         }

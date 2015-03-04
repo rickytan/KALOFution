@@ -39,6 +39,7 @@ private:
     void alignPairs();
     void alignEachPair(CloudPair &pair);
     CloudTypePtr downsampledCloudWithNumberOfPoints(CloudTypePtr cloud, int points);
+    void gridFilterPointPair(CloudPair& pair, float gridSize, int Nc = 5);
 private:
     std::vector<CloudTypePtr> m_pointClouds;
     std::vector<CloudPair, Eigen::aligned_allocator<CloudPair> > m_cloudPairs;

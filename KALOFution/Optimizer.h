@@ -27,10 +27,10 @@ public:
     void operator ()(std::vector<CloudTypePtr> &pointClouds, std::vector<CloudPair> &cloudPaire);
 
 private:
-    void optimizeRigid();
-    void eachCloudPair(CloudPair &pair);
-    void mergeClouds();
-    void optimizeUseG2O();
+    inline void optimizeRigid();
+    inline void eachCloudPair(CloudPair &pair);
+    inline void mergeClouds();
+    inline void optimizeUseG2O();
 private:
     OptimizerParameter &m_params;
 
