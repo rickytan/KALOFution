@@ -63,7 +63,7 @@ typedef struct CloudPair {
     Eigen::Affine3f relativeTrans;
     int validCorresPointNumber;
     std::vector<PointPair> corresPointIdx;
-    CloudPair(int p, int q, const Eigen::Affine3f& incTrans = Eigen::Affine3f::Identity()) {
+    CloudPair(int p, int q, const Eigen::Affine3f& incTrans = Eigen::Affine3f::Identity()): corresPointIdx() {
         corresIdx = std::make_pair(p, q);
         relativeTrans = incTrans;
         validCorresPointNumber = 0;

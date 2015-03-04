@@ -158,7 +158,7 @@ void CorresBuilder::gridFilterPointPair(CloudPair& pair, float gridSize, int Nc)
 
     // find min max
     for (size_t p = 0; p < pointCorres.size(); ++p) {
-        PointType &point = pointCloud->points[p];
+        PointType point = pointCloud->points[p];
         if (point.x < minPoint.x) {
             minPoint.x = point.x;
         }
@@ -188,7 +188,7 @@ void CorresBuilder::gridFilterPointPair(CloudPair& pair, float gridSize, int Nc)
     typedef std::unordered_map<uint32_t, std::vector<PointPair> > Bin;
     Bin pointGridBin;
     for (size_t p = 0; p < pointCorres.size(); ++p) {
-        PointType &point = pointCloud->points[p];
+        PointType point = pointCloud->points[p];
         uint32_t index_x = static_cast<uint32_t>(floorf((point.x - minPoint.x) / gridSize));
         uint32_t index_y = static_cast<uint32_t>(floorf((point.y - minPoint.y) / gridSize));
         uint32_t index_z = static_cast<uint32_t>(floorf((point.z - minPoint.z) / gridSize));
@@ -217,6 +217,7 @@ void CorresBuilder::gridFilterPointPair(CloudPair& pair, float gridSize, int Nc)
 void CorresBuilder::findCorres(CloudPair& pair)
 {
     std::vector<PointPair> &pointCorrespondence = pair.corresPointIdx;
+    pointCorrespondence.clear();
 
     const int K = 1;
 
@@ -276,7 +277,7 @@ void CorresBuilder::findCorres(CloudPair& pair)
         pair.corresIdx = std::make_pair(-1, -1);
     }
     else {
-        gridFilterPointPair(pair, 30.f, 5);
+        gridFilterPointPair(pair, 0.2f, 5);
         pair.validCorresPointNumber = pointCorrespondence.size();
     }
 
