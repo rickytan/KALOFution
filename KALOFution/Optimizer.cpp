@@ -332,7 +332,7 @@ void Optimizer::eachCloudPair(CloudPair &pair)
 
     double score = 0.0;
     {
-        pcl::ScopeTime time("calculate LSE matrix");
+        //pcl::ScopeTime time("calculate LSE matrix");
     
 #pragma unroll 8
         for (size_t point_count = 0; point_count < pair.corresPointIdx.size(); ++point_count) {

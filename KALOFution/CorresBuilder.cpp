@@ -153,12 +153,12 @@ void CorresBuilder::gridFilterPointPair(CloudPair& pair, float gridSize, int Nc)
     minPoint.x = minPoint.y = minPoint.z = std::numeric_limits<float>::max();
     maxPoint.x = maxPoint.y = maxPoint.z = -std::numeric_limits<float>::max();
 
-    std::vector<PointPair> &pointCorres = pair.corresPointIdx;
+    std::vector<PointPair, Eigen::aligned_allocator<PointPair> > &pointCorres = pair.corresPointIdx;
     CloudTypePtr pointCloud = m_pointClouds[pair.corresIdx.first];
 
     // find min max
     for (size_t p = 0; p < pointCorres.size(); ++p) {
-        PointType point = pointCloud->points[p];
+        PointType point = pointCloud->points[pointCorres[p].first];
         if (point.x < minPoint.x) {
             minPoint.x = point.x;
         }
@@ -180,15 +180,15 @@ void CorresBuilder::gridFilterPointPair(CloudPair& pair, float gridSize, int Nc)
         }
     }
 
-    uint32_t grid_size_x = static_cast<uint32_t>(ceilf(maxPoint.x - minPoint.x) / gridSize);
-    uint32_t grid_size_y = static_cast<uint32_t>(ceilf(maxPoint.y - minPoint.y) / gridSize);
-    uint32_t grid_size_z = static_cast<uint32_t>(ceilf(maxPoint.z - minPoint.z) / gridSize);
+    uint32_t grid_size_x = static_cast<uint32_t>(ceilf((maxPoint.x - minPoint.x) / gridSize));
+    uint32_t grid_size_y = static_cast<uint32_t>(ceilf((maxPoint.y - minPoint.y) / gridSize));
+    uint32_t grid_size_z = static_cast<uint32_t>(ceilf((maxPoint.z - minPoint.z) / gridSize));
 
     // split into grid
     typedef std::unordered_map<uint32_t, std::vector<PointPair> > Bin;
     Bin pointGridBin;
     for (size_t p = 0; p < pointCorres.size(); ++p) {
-        PointType point = pointCloud->points[p];
+        PointType point = pointCloud->points[pointCorres[p].first];
         uint32_t index_x = static_cast<uint32_t>(floorf((point.x - minPoint.x) / gridSize));
         uint32_t index_y = static_cast<uint32_t>(floorf((point.y - minPoint.y) / gridSize));
         uint32_t index_z = static_cast<uint32_t>(floorf((point.z - minPoint.z) / gridSize));
@@ -212,11 +212,12 @@ void CorresBuilder::gridFilterPointPair(CloudPair& pair, float gridSize, int Nc)
     {
         pointCorres.insert(pointCorres.end(), it->second.begin(), it->second.end());
     }
+    std::sort(pointCorres.begin(), pointCorres.end(), PointPair::PointPairIndexComparer());
 }
 
 void CorresBuilder::findCorres(CloudPair& pair)
 {
-    std::vector<PointPair> &pointCorrespondence = pair.corresPointIdx;
+    std::vector<PointPair, Eigen::aligned_allocator<PointPair> > &pointCorrespondence = pair.corresPointIdx;
     pointCorrespondence.clear();
 
     const int K = 1;
@@ -277,7 +278,7 @@ void CorresBuilder::findCorres(CloudPair& pair)
         pair.corresIdx = std::make_pair(-1, -1);
     }
     else {
-        gridFilterPointPair(pair, 0.2f, 5);
+        gridFilterPointPair(pair, 0.2f, 10);
         pair.validCorresPointNumber = pointCorrespondence.size();
     }
 

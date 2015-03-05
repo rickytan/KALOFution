@@ -28,7 +28,8 @@ namespace Eigen {
 
 #endif
 
-
+#include <Eigen/Dense>
+#include <Eigen/StdVector>
 
 #include <pcl/point_types.h>
 #include <pcl/point_cloud.h>
@@ -49,6 +50,12 @@ struct PointPair: public std::pair<int, int> {
         }
     } PointPairComparer;
 
+    typedef struct {
+        bool operator()(const PointPair& _Left, const PointPair& _Right) const {
+            return _Left.first < _Right.first;
+        }
+    } PointPairIndexComparer;
+
     PointPair(): std::pair<int, int>(), quality(0.f) {}
     PointPair(int first, int second, float q = 0.f) {
         this->first = first;
@@ -56,13 +63,14 @@ struct PointPair: public std::pair<int, int> {
         this->quality = q;
     }
     float quality;
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 };
 
 typedef struct CloudPair {
     std::pair<int, int> corresIdx;
     Eigen::Affine3f relativeTrans;
     int validCorresPointNumber;
-    std::vector<PointPair> corresPointIdx;
+    std::vector<PointPair, Eigen::aligned_allocator<PointPair> > corresPointIdx;
     CloudPair(int p, int q, const Eigen::Affine3f& incTrans = Eigen::Affine3f::Identity()): corresPointIdx() {
         corresIdx = std::make_pair(p, q);
         relativeTrans = incTrans;
