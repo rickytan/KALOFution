@@ -1,6 +1,7 @@
 #include <limits>
 #include <numeric>
 #include <algorithm>
+#include <unordered_map>
 
 #include "CorresBuilder.h"
 #include "DataProvider.h"
@@ -125,6 +126,7 @@ void CorresBuilder::alignPairs()
 
 void CorresBuilder::findCorresPoints()
 {
+    
     boost::thread_group group;
     int cores = std::max(boost::thread::hardware_concurrency(), (unsigned)2);
     int count = 0;
@@ -139,11 +141,84 @@ void CorresBuilder::findCorresPoints()
         }
     }
     group.join_all();
+    /*
+    for (size_t i = 0; i < m_cloudPairs.size(); ++i) {
+        findCorres(m_cloudPairs[i]);
+    }*/
+}
+
+void CorresBuilder::gridFilterPointPair(CloudPair& pair, float gridSize, int Nc)
+{
+    PointType minPoint, maxPoint;
+    minPoint.x = minPoint.y = minPoint.z = std::numeric_limits<float>::max();
+    maxPoint.x = maxPoint.y = maxPoint.z = -std::numeric_limits<float>::max();
+
+    std::vector<PointPair, Eigen::aligned_allocator<PointPair> > &pointCorres = pair.corresPointIdx;
+    CloudTypePtr pointCloud = m_pointClouds[pair.corresIdx.first];
+
+    // find min max
+    for (size_t p = 0; p < pointCorres.size(); ++p) {
+        PointType point = pointCloud->points[pointCorres[p].first];
+        if (point.x < minPoint.x) {
+            minPoint.x = point.x;
+        }
+        if (point.y < minPoint.y) {
+            minPoint.y = point.y;
+        }
+        if (point.z < minPoint.z) {
+            minPoint.z = point.z;
+        }
+
+        if (point.x > maxPoint.x) {
+            maxPoint.x = point.x;
+        }
+        if (point.y > maxPoint.y) {
+            maxPoint.y = point.y;
+        }
+        if (point.z > maxPoint.z) {
+            maxPoint.z = point.z;
+        }
+    }
+
+    uint32_t grid_size_x = static_cast<uint32_t>(ceilf((maxPoint.x - minPoint.x) / gridSize));
+    uint32_t grid_size_y = static_cast<uint32_t>(ceilf((maxPoint.y - minPoint.y) / gridSize));
+    uint32_t grid_size_z = static_cast<uint32_t>(ceilf((maxPoint.z - minPoint.z) / gridSize));
+
+    // split into grid
+    typedef std::unordered_map<uint32_t, std::vector<PointPair> > Bin;
+    Bin pointGridBin;
+    for (size_t p = 0; p < pointCorres.size(); ++p) {
+        PointType point = pointCloud->points[pointCorres[p].first];
+        uint32_t index_x = static_cast<uint32_t>(floorf((point.x - minPoint.x) / gridSize));
+        uint32_t index_y = static_cast<uint32_t>(floorf((point.y - minPoint.y) / gridSize));
+        uint32_t index_z = static_cast<uint32_t>(floorf((point.z - minPoint.z) / gridSize));
+        uint32_t index = index_x + index_y * grid_size_x + index_z * grid_size_x * grid_size_y;
+        pointGridBin[index].push_back(pointCorres[p]);
+    }
+
+    // sort by quality
+    for (Bin::iterator it = pointGridBin.begin(); it != pointGridBin.end(); ++it)
+    {
+        if (it->second.size() <= Nc) {
+            continue;
+        }
+        std::sort(it->second.begin(), it->second.end(), PointPair::PointPairComparer());
+        it->second.resize(Nc);
+    }
+
+    // re-merge
+    pointCorres.clear();
+    for (Bin::iterator it = pointGridBin.begin(); it != pointGridBin.end(); ++it)
+    {
+        pointCorres.insert(pointCorres.end(), it->second.begin(), it->second.end());
+    }
+    std::sort(pointCorres.begin(), pointCorres.end(), PointPair::PointPairIndexComparer());
 }
 
 void CorresBuilder::findCorres(CloudPair& pair)
 {
-    std::vector<PointPair> pointCorrespondence;
+    std::vector<PointPair, Eigen::aligned_allocator<PointPair> > &pointCorrespondence = pair.corresPointIdx;
+    pointCorrespondence.clear();
 
     const int K = 1;
 
@@ -169,17 +244,18 @@ void CorresBuilder::findCorres(CloudPair& pair)
     for (size_t n = 0; n < transformed->size(); ++n) {
         if (!m_params.useBetterCorrespondence) {
             if (kdtree.nearestKSearch(transformed->points[n], K, pointIndices, pointDistances) > 0) {
-                PointType point0 = p0->points[pointIndices[0]];
-                PointType point1 = transformed->points[n];
+                const PointType &point0 = p0->points[pointIndices[0]];
+                const PointType &point1 = transformed->points[n];
                 float norm = Eigen::Map<Eigen::Vector3f>(point0.normal).dot(Eigen::Map<Eigen::Vector3f>(point1.normal));
                 if (pointDistances[0] < m_params.corresPointDistThres * m_params.corresPointDistThres &&
                     fabsf(norm) > normThres) {
-                    pointCorrespondence.push_back(PointPair(pointIndices[0], n));
+                    pointCorrespondence.push_back(PointPair(pointIndices[0], n, norm));
                 }
             }
         }
         else {
             const float lamda = 10.f;
+
             if (kdtree.radiusSearch(transformed->points[n], m_params.corresPointDistThres, pointIndices, pointDistances, 50) > 0) {
                 for (int i = 0; i < pointDistances.size(); ++i)
                 {
@@ -190,7 +266,7 @@ void CorresBuilder::findCorres(CloudPair& pair)
                 int index = std::max_element(pointDistances.begin(), pointDistances.end()) - pointDistances.begin();
                 float norm = transformed->points[n].getNormalVector3fMap().dot(p0->points[pointIndices[index]].getNormalVector3fMap());
                 if ( norm > normThres) {
-                    pointCorrespondence.push_back(PointPair(pointIndices[index], n));
+                    pointCorrespondence.push_back(PointPair(pointIndices[index], n, pointDistances[index]));
                 }
             }
         }
@@ -202,6 +278,7 @@ void CorresBuilder::findCorres(CloudPair& pair)
         pair.corresIdx = std::make_pair(-1, -1);
     }
     else {
+        gridFilterPointPair(pair, 0.2f, 10);
         pair.validCorresPointNumber = pointCorrespondence.size();
     }
 

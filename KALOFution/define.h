@@ -28,7 +28,8 @@ namespace Eigen {
 
 #endif
 
-
+#include <Eigen/Dense>
+#include <Eigen/StdVector>
 
 #include <pcl/point_types.h>
 #include <pcl/point_cloud.h>
@@ -39,16 +40,38 @@ namespace Eigen {
 typedef pcl::PointNormal PointType;
 typedef pcl::PointCloud<PointType> CloudType;
 typedef pcl::PointCloud<PointType>::Ptr CloudTypePtr;
-typedef std::pair<int, int> PointPair;
+
 typedef Eigen::Affine3f CloudTransform;
 
+struct PointPair: public std::pair<int, int> {
+    typedef struct {
+        bool operator()(const PointPair& _Left, const PointPair& _Right) const {
+            return _Left.quality > _Right.quality;
+        }
+    } PointPairComparer;
+
+    typedef struct {
+        bool operator()(const PointPair& _Left, const PointPair& _Right) const {
+            return _Left.first < _Right.first;
+        }
+    } PointPairIndexComparer;
+
+    PointPair(): std::pair<int, int>(), quality(0.f) {}
+    PointPair(int first, int second, float q = 0.f) {
+        this->first = first;
+        this->second = second;
+        this->quality = q;
+    }
+    float quality;
+    EIGEN_MAKE_ALIGNED_OPERATOR_NEW
+};
 
 typedef struct CloudPair {
     std::pair<int, int> corresIdx;
     Eigen::Affine3f relativeTrans;
     int validCorresPointNumber;
-    std::vector<PointPair> corresPointIdx;
-    CloudPair(int p, int q, const Eigen::Affine3f& incTrans = Eigen::Affine3f::Identity()) {
+    std::vector<PointPair, Eigen::aligned_allocator<PointPair> > corresPointIdx;
+    CloudPair(int p, int q, const Eigen::Affine3f& incTrans = Eigen::Affine3f::Identity()): corresPointIdx() {
         corresIdx = std::make_pair(p, q);
         relativeTrans = incTrans;
         validCorresPointNumber = 0;
@@ -59,7 +82,7 @@ typedef struct CloudPair {
         if (infile.is_open()) {
             int p0, p1;
             while (infile >> p0 >> p1) {
-                corresPointIdx.push_back(std::make_pair(p0, p1));
+                corresPointIdx.push_back(PointPair(p0, p1));
             }
             infile.close();
         }

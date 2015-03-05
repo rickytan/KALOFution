@@ -39,7 +39,7 @@ public:
         fillBlock(col, row, vec1 * vec0.transpose());
         fillBlock(col, col, vec1 * vec1.transpose());
     }
-    void add(int r, int c, double v) {
+    inline void add(int r, int c, double v) {
         m_tripletToFill.push_back(Tri(r, c, v));
         /*
         if (!m_indexMap.count(r)) {
@@ -55,8 +55,10 @@ public:
          */
     }
 private:
-    void fillBlock(int block_r, int block_c, const Eigen::Matrix<double, 6, 6> &mat) {
+    inline void fillBlock(int block_r, int block_c, const Eigen::Matrix<double, 6, 6> &mat) {
+#pragma unroll 6
         for (int i = 0; i < 6; ++i) {
+#pragma unroll 6
             for (int j = 0; j < 6; ++j) {
                 add(block_r * 6 + i, block_c * 6 + j, mat(i, j));
             }
@@ -112,7 +114,7 @@ void Optimizer::optimizeUseG2O()
         {
             VertexSE3 *vertex = new VertexSE3;
             vertex->setId(cloud_count);
-            Isometry3D affine;
+            Isometry3D affine = Isometry3D::Identity();
             affine.linear() = m_pointClouds[cloud_count]->sensor_orientation_.toRotationMatrix().cast<Isometry3D::Scalar>();
             affine.translation() = m_pointClouds[cloud_count]->sensor_origin_.block<3, 1>(0, 0).cast<Isometry3D::Scalar>();
             vertex->setEstimate(affine);
@@ -123,6 +125,14 @@ void Optimizer::optimizeUseG2O()
 
     {
         pcl::ScopeTime time("G2O setup Graph edges");
+        double trans_noise = 0.5, rot_noise = 0.5235;
+        EdgeSE3::InformationType infomation = EdgeSE3::InformationType::Zero();
+        infomation.block<3, 3>(0, 0) << trans_noise * trans_noise, 0, 0,
+                                        0, trans_noise * trans_noise, 0,
+                                        0, 0, trans_noise * trans_noise;
+        infomation.block<3, 3>(3, 3) << rot_noise * rot_noise, 0, 0,
+                                        0, rot_noise * rot_noise, 0,
+                                        0, 0, rot_noise * rot_noise;
         for (size_t pair_count = 0; pair_count < m_cloudPairs.size(); ++pair_count)
         {
             CloudPair pair = m_cloudPairs[pair_count];
@@ -131,22 +141,44 @@ void Optimizer::optimizeUseG2O()
             EdgeSE3 *edge = new EdgeSE3;
 		    edge->vertices()[0] = optimizer.vertex(from);
 		    edge->vertices()[1] = optimizer.vertex(to);
-		    edge->setMeasurementFromState();
 
-            EdgeSE3::InformationType ATA;
-            ATA.setZero();
+            Eigen::Matrix<double, 6, 6> ATA = Eigen::Matrix<double, 6, 6>::Zero();
+            Eigen::Matrix<double, 6, 1> ATb = Eigen::Matrix<double, 6, 1>::Zero();
 #pragma unroll 8
             for (size_t point_count = 0; point_count < pair.corresPointIdx.size(); ++point_count) {
+                int point_p = pair.corresPointIdx[point_count].first;
                 int point_q = pair.corresPointIdx[point_count].second;
+                PointType P = m_pointClouds[from]->points[point_p];
                 PointType Q = m_pointClouds[to]->points[point_q];
 
-                Eigen::Matrix<double, 3, 6> A;
-                A <<  1, 0, 0,        0,  2 * Q.z, -2 * Q.y,
-                      0, 1, 0, -2 * Q.z,        0,  2 * Q.x,
-                      0, 0, 1,  2 * Q.y, -2 * Q.x,        0;
-                ATA += A.transpose() * A;
+                Eigen::Vector3d p = P.getVector3fMap().cast<double>();
+                Eigen::Vector3d q = Q.getVector3fMap().cast<double>();
+                Eigen::Vector3d Np = P.getNormalVector3fMap().cast<double>();
+
+                double b = (p - q).dot(Np);
+
+                Eigen::Matrix<double, 6, 1> A_p;
+                A_p.block<3, 1>(0, 0) = p.cross(Np);
+                A_p.block<3, 1>(3, 0) = Np;
+
+                ATA += A_p * A_p.transpose();
+                ATb += A_p * b;
             }
-		    edge->setInformation(ATA);
+
+            Eigen::Matrix<double, 6, 1> X = ATA.ldlt().solve(ATb);
+            Isometry3D measure = Isometry3D::Identity();
+            float beta = X[0];
+            float gammar = X[1];
+            float alpha = X[2];
+            measure.linear() = (Eigen::Matrix3d)Eigen::AngleAxisd(alpha, Eigen::Vector3d::UnitZ()) *
+                Eigen::AngleAxisd(gammar, Eigen::Vector3d::UnitY()) *
+                Eigen::AngleAxisd(beta, Eigen::Vector3d::UnitX());
+            measure.translation() = X.block<3, 1>(3, 0);
+
+            edge->setMeasurement(measure);
+
+		    edge->setInformation(infomation);
+            
             optimizer.addEdge(edge);
         }
     }
@@ -155,7 +187,7 @@ void Optimizer::optimizeUseG2O()
     {
         pcl::ScopeTime time("g2o optimizing");
         optimizer.initializeOptimization();
-        optimizer.optimize(10);
+        optimizer.optimize(30);
     }
     optimizer.save("debug_postOpt.g2o");
 
@@ -205,7 +237,7 @@ void Optimizer::optimizeRigid()
         align_error = 0.0;
 
         PCL_INFO("\tProcessing %d cloud pairs\n", m_cloudPairs.size());
-
+        
         int cpu_cores = std::max(boost::thread::hardware_concurrency(), (unsigned)2);
         int count = 0;
         boost::thread_group group;
@@ -218,6 +250,7 @@ void Optimizer::optimizeRigid()
             count++;
         }
         group.join_all();
+        
         /*
         for (size_t pair_count = 0; pair_count < m_cloudPairs.size(); ++pair_count) {
             eachCloudPair(m_cloudPairs[pair_count]);
@@ -286,6 +319,7 @@ void Optimizer::eachCloudPair(CloudPair &pair)
     size_t matrix_size = m_pointClouds.size() * 6;
 
     TriContainer mat_elem;
+    mat_elem.reserve(matrix_size * matrix_size / 5);
     SparseMatFiller filler(mat_elem);
 
     for (int i = 0; i < 6; ++i) {
@@ -297,32 +331,37 @@ void Optimizer::eachCloudPair(CloudPair &pair)
     atb.setZero(), ata.setZero();
 
     double score = 0.0;
+    {
+        //pcl::ScopeTime time("calculate LSE matrix");
+    
 #pragma unroll 8
-    for (size_t point_count = 0; point_count < pair.corresPointIdx.size(); ++point_count) {
-        int point_p = pair.corresPointIdx[point_count].first;
-        int point_q = pair.corresPointIdx[point_count].second;
-        PointType P = m_pointClouds[cloud0]->points[point_p];
-        PointType Q = m_pointClouds[cloud1]->points[point_q];
+        for (size_t point_count = 0; point_count < pair.corresPointIdx.size(); ++point_count) {
+            int point_p = pair.corresPointIdx[point_count].first;
+            int point_q = pair.corresPointIdx[point_count].second;
+            PointType P = m_pointClouds[cloud0]->points[point_p];
+            PointType Q = m_pointClouds[cloud1]->points[point_q];
 
-        Eigen::Vector3d p = P.getVector3fMap().cast<double>();
-        Eigen::Vector3d q = Q.getVector3fMap().cast<double>();
-        Eigen::Vector3d Np = P.getNormalVector3fMap().cast<double>();
+            Eigen::Vector3d p = P.getVector3fMap().cast<double>();
+            Eigen::Vector3d q = Q.getVector3fMap().cast<double>();
+            Eigen::Vector3d Np = P.getNormalVector3fMap().cast<double>();
 
-        double b = -(p - q).dot(Np);
-        score += b * b;
-        Eigen::Matrix<double, 6, 1> A_p, A_q;
-        A_p.block<3, 1>(0, 0) = p.cross(Np);
-        A_p.block<3, 1>(3, 0) = Np;
-        A_q.block<3, 1>(0, 0) = -q.cross(Np);
-        A_q.block<3, 1>(3, 0) = -Np;
+            double b = -(p - q).dot(Np);
+            score += b * b;
+            Eigen::Matrix<double, 6, 1> A_p, A_q;
+            A_p.block<3, 1>(0, 0) = p.cross(Np);
+            A_p.block<3, 1>(3, 0) = Np;
+            A_q.block<3, 1>(0, 0) = -q.cross(Np);
+            A_q.block<3, 1>(3, 0) = -Np;
         
-        filler.fill(cloud0, cloud1, A_p, A_q);
-        atb.block<6, 1>(cloud0 * 6, 0) += A_p * b;
-        atb.block<6, 1>(cloud1 * 6, 0) += A_q * b;
+            filler.fill(cloud0, cloud1, A_p, A_q);
+            atb.block<6, 1>(cloud0 * 6, 0) += A_p * b;
+            atb.block<6, 1>(cloud1 * 6, 0) += A_q * b;
+        }
+        ata.setFromTriplets(mat_elem.begin(), mat_elem.end());
     }
-    ata.setFromTriplets(mat_elem.begin(), mat_elem.end());
 
     {
+        //pcl::ScopeTime time("Fill sparse matrix");
         boost::mutex::scoped_lock lock(m_cloudPairMutex);
         //std::cout << "\tcurrent thread : " << boost::this_thread::get_id() << std::endl;
         //PCL_INFO("\tPair <%d, %d> alignment Score : %.6f\n", cloud0, cloud1, score);
